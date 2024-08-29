@@ -1,0 +1,27 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+
+\section{Introduction}
+\textbf{Hello world!}
+
+\begin{figure}[bh]
+	\centering
+	\includegraphics[width=15cm]{aggregration.png}
+	\label{fig:aggregration}
+	\caption{aggregation}
+\end{figure}
+Hello, here is some text without a meaning\ldots
+
+\begin{lstlisting}[caption=test,language=MongoDB]
+db.orders.aggregate([
+	{$match: {status: "A"}}, 
+		{$group: {_id: "$cust_id", total: {$sum: "$amount"}}}
+])
+\end{lstlisting}
+
+
+
+\end{document}
