@@ -4,24 +4,71 @@
 
 \begin{document}
 
-\section{Introduction}
-\textbf{Hello world!}
+\chapter{Introduction}
+\section{Getting Started with MongoDB Atlas}
+\subsection{Creating and Deploying on Atlas Cluster}
+\begin{enumerate}
+	\item{Create a Organization}
+	\item{Create a Project under Organization}
+	\item{Create a cluster $\rightarrow$ Advanced Settings $\rightarrow$ Shared M0 cluster $\rightarrow$ Add username and password $\rightarrow$ Add you ip as allowed origin.}
+	\item{Open Database tab and navigate to your cluster}
+	\item{Load default data}
+	\item{Navigate to collections tab to see loaded clusters}
+	\item{Sample database fetch from analytics accounts table
+		\begin{lstlisting}[caption=account test data,language=json]
+{
+	"_id": {
+		"$oid": "5ca4bbc7a2dd94ee5816238c"
+	},
+	"account_id": {
+		"$numberInt": "371138"
+	},
+	"limit": {
+		"$numberInt": "9000"
+	},
+	"products": [
+		"Derivatives",
+		"InvestmentStock"
+	]
+}
+		\end{lstlisting}
+	}
+\item{To filter on account id:
+		\begin{lstlisting}[caption=filter on account id,language=json]
+{
+	account_id: 794875
+}
+	\end{lstlisting}
+}
+\item{To login into atlas login use \lstinline[language=bash,caption=atlas authentication]{atlas auth login}}
+\item{create cluster with user and password:
+		\begin{lstlisting}[caption=load cluster,language=bash]
+atlas setup --clusterName myAtlasClusterEDU --provider WS --currentIp --skipSampleData --username myAtlasDBUser --password myatlas-001 --projectId 66d19c1f26ef8b512df3b41 | tee atlas_cluster_details.txt
+		\end{lstlisting}
+	}
+\item{Load sample data: \lstinline[caption=load sample data, language=bash]{atlas clusters smapleData load myAtlasClusterEDU} }
 
-\begin{figure}[bh]
-	\centering
-	\includegraphics[width=15cm]{aggregration.png}
-	\label{fig:aggregration}
-	\caption{aggregation}
-\end{figure}
-Hello, here is some text without a meaning\ldots
+\end{enumerate}
 
-\begin{lstlisting}[caption=test,language=MongoDB]
-db.orders.aggregate([
-	{$match: {status: "A"}}, 
-		{$group: {_id: "$cust_id", total: {$sum: "$amount"}}}
-])
-\end{lstlisting}
+\section{Introduction to MongoDB}
+\subsection{Key Terms}
+\subsubsection{Document}
+The basic using of data in MongoDB
+\subsubsection{Collections}
+A grouping of documents. Documents in collection are typically similar they don't necessarily have same structuer.
+\subsubsection{Database}
+A container for Collections
+
+\section{MongoDB and The Document Model}
+\subsection{The MongoDB Document Model}
 
 
+
+% \begin{lstlisting}[caption=test,language=MongoDB]
+% db.orders.aggregate([
+% 	{$match: {status: "A"}}, 
+% 		{$group: {_id: "$cust_id", total: {$sum: "$amount"}}}
+% ])
+% \end{lstlisting}
 
 \end{document}
