@@ -1,0 +1,90 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+
+\chapter{Data Modeling}
+\section{Introduction to Data Modeling}
+Data Modeling is process of defining how data is stored and the relationships and the relationships that exists among different entities in your data. \\ 
+We refer to Organization of data inside a database as a \textbf{Schema}. \\ 
+To develop schema think about your database and you need to ask these questions:
+\begin{itemize}
+	\item{What does my application do?}
+	\item{What data will I store?}
+	\item{How will users access this data?}
+	\item{What data will be most valuable to me?}
+\end{itemize}
+
+Asking these questions will help you to:
+\begin{itemize}
+	\item{descibe your task as well those of users. }
+	\item{What you data looks like?}
+	\item{the relationships among the data.}
+	\item{The tooling you plan to have.}
+	\item{The access patterns that might emerge.}
+\end{itemize}
+
+\medskip
+A good data model can: 
+\begin{itemize}
+	\item{Make it easier to manage data}
+	\item{Make queries more efficient}
+	\item{Use less memory and \gls{CPU}}
+	\item{Reduce cost}
+\end{itemize}
+
+As a general pricipal of MongoDB data that is accessed together should be stored together. \\ 
+Collections do not enforce any document structure by default. That means document even those in the same collection can have different structures. \\
+Each document at MongoDB can be different which is known as \textbf{Polymorphism}. \\ 
+Embedded document model enables us to build complex relationships among data. You can normalize your data by using database references. \\ 
+The key pricipal here is how your application will use the data rather than how it's stored in the database.
+
+
+
+\section{Types of Data Relationships}
+\subsection{Different types of relationships data can have: }
+\begin{itemize}
+	\item{One-to-one}
+	\item{One-to-many}
+	\item{Many-to-Many}
+\end{itemize}
+
+\subsubsection{One-to-One}
+A relationship where a data entity in one set is connected to exactly one data entity in another set.
+
+\subsubsection{One-to-Many}
+A relationship where a data entity in one set is connected to any number of entities in another set.
+\subsubsection{Many-to-Many}
+A relationship where any number of data entities in one set are connected to any number of data entities in another set.
+
+
+\subsection{Two main ways to model these relationships: }
+\begin{itemize}
+	\item{Embeding}
+	\item{Referencing}
+\end{itemize}
+\subsubsection{Embeding}
+We take related data and insert it into our document.
+\subsubsection{Referencing}
+When we refer to documents in another collection in our document. Reference is made by their respective \lstinline{ObjectID}.
+
+\section{Modeling Data Relationships}
+\subsection{Embedding Data in Documents}
+Also known as nested document.
+\begin{itemize}
+	\item Avoids application joins. 
+	\item Provides better performance for read operatinos.
+	\item Allows developers to update related data in a single write operations.
+\end{itemize}
+\subsubsection {Issues:}
+
+\begin{itemize}
+	\item Embedding data into a single document can create large documents.
+	\item{Large documents have to be read into memory in full, which can result in a slow application performance for you end user.}
+	\item{Continuesly adding data without limit creates \textbf{unbounded documents.}}
+	\item{Unbounded Documents may exceed the \gls{BSON} document threshold of 16MB. This is schema anit-patterns which you should avoid.}
+\end{itemize}
+
+\subsection{Referencing Data in Documents}
+\printglossaries
+\end{document}

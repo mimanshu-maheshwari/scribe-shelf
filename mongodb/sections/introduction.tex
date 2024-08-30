@@ -1,7 +1,6 @@
 \documentclass[../main.tex]{subfiles}
 
 \graphicspath{{\subfix{../images/}}}
-
 \begin{document}
 
 \chapter{Introduction}
@@ -55,20 +54,34 @@ atlas setup --clusterName myAtlasClusterEDU --provider WS --currentIp --skipSamp
 \subsubsection{Document}
 The basic using of data in MongoDB
 \subsubsection{Collections}
-A grouping of documents. Documents in collection are typically similar they don't necessarily have same structuer.
+A grouping of documents. Documents in collection are typically similar they don't necessarily have same structure.
 \subsubsection{Database}
 A container for Collections
 
 \section{MongoDB and The Document Model}
 \subsection{The MongoDB Document Model}
+\begin{itemize}
+	\item{MongoDB stores data in structures known as documents}
+\end{itemize}
+
+\subsubsection{Document}
+Docuement are displayed in \gls{JSON} format but stored in \gls{BSON} format.
+\gls{BSON} also supports additional data types that are unavailable in \gls{JSON}
+
+It can support All \gls{JSON} data types as well as Dates, Numbers, Object Id's, and more!
+ 
+ObjectID is used to create unique identifires.
+Every Document requires an $_id$ field, which acts as a primary key.
+If an inserted document doesn't include the $_id$ field, MongoDB automatically generates an ObjectId for the $_id$ field.
+MongoDB supports flexible schema model and polymorphic data, this allows us to store documents with different structure together.
+Documents may contain fields. Fields may contain different types.
+
+\subsubsection{Optional Schema validation}
+Set of constraints on the structure of documents.
+
+\section{Managing Databases, Colections, and Documents in Atlas Data Explorer}
+Explore Atlas
 
 
-
-% \begin{lstlisting}[caption=test,language=MongoDB]
-% db.orders.aggregate([
-% 	{$match: {status: "A"}}, 
-% 		{$group: {_id: "$cust_id", total: {$sum: "$amount"}}}
-% ])
-% \end{lstlisting}
-
+\printglossaries
 \end{document}
