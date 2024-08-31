@@ -1,0 +1,28 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+
+\chapter{Connection to MongoDB Database}
+\section{Using MongoDB Connection Strings}
+Connection string can be used to connect from MongoShell, MongoDB Compass, or any other application.
+It provides standered fromat and DNS seed list format.
+\subsubsection{Standered Format}
+Used to connect to standalone clusters, replica sets, or sharded clusters.
+\subsubsection{DNS Seed List Format}
+Released in MongoDB 3.6.
+\subsection{Connection String}
+It allows to provide a DNS server list to connection string. Gives more flexibility of deployment.
+Ability to change servers in rotation without reconfiguring clients.
+In atlas it is present in Database tab $\rightarrow$ Connect $\rightarrow$ Connect to application.\\ 
+Connection String: $mongodb+srv://<username>:<password>@cluster0.usqsf.mongodb.net/?retryWrites=true&w=majority$ \\
+If port number is not specified MongoDB will default to $27017$.
+\section{Connecting to a MongoDB Atlas Cluster with the Shell}
+
+
+
+
+\printglossaries
+
+\end{document}
+

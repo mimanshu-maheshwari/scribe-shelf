@@ -86,5 +86,68 @@ Also known as nested document.
 \end{itemize}
 
 \subsection{Referencing Data in Documents}
+When we want to store data in two different collections but also ensure that those collections are related, we can use \textbf{References}.
+References save the $_id$ field of one document in another document as a link between the two.
+They are simple and sufficient for most use cases. Using references is called \textbf{linking} or \textbf{data normalization}.
+It avoid duplication of data and in most cases smaller documents, however referencing data you'll need to query from multiple documents costing extyra resources and impacts read performance. 
+
+\bigskip
+
+\begin{tabular}{|c|c|}
+\toprule
+\textbf{Embedding} & \textbf{Referencing}  \\ 
+\midrule
+$\checkmark$ Single query to retrieve data  & $\checkmark$ No duplication   \\ \hline
+$\checkmark$ Single operation to update/delete data  & $\checkmark$ Smaller Documents   \\ \hline
+! Data Duplication  & ! Need to join data from multiple documents  \\ \hline
+! Large documents  &  \\ 
+\bottomrule
+\end{tabular}
+
+\section{Scaling a Data Model}
+Optimum efficiency of: 
+\begin{itemize}
+	\item query result depends on 
+	\item memory usage
+	\item \gls{CPU} usage 
+	\item storage
+\end{itemize}
+
+\begin{itemize}
+	\item When creating a data model, avoid documents that are unbounded. Document size grows infinitely.
+		Problems as teh array grows larger in embedded document.
+		\begin{itemize}
+			\item It will take up more space in memory 
+			\item may impact write performance as entire document is rewritten into MongoDB data storage.
+			\item it will be difficult to perform pagination of that array.
+			\item Maximum document size of 16MB will lead to storage problems.
+		\end{itemize}
+	\item benefit is that we can retrieve all document in single read.
+	\item Avoid: 
+		\begin{itemize}
+			\item More than the document size limit of 16 MB.\@
+			\item Poor query performance.
+			\item Poor write performance.
+			\item Too much memory being used.
+		\end{itemize}
+\end{itemize}
+
+\section{Using Atlas Tools for Schema Help}
+Schema design patterns are guidelines that help developers plan, organize, and model data.
+Schema anti-patterns result in suboptimal performance and non scalable solutions. Eg: 
+\begin{itemize}
+	\item massive arrays.
+	\item Massive number of collections.
+	\item Bloated documents. 
+	\item Unnecessary indexes.
+	\item Queries without indexes.
+	\item Data that's accessed together, but stored in different collections.
+\end{itemize}
+
+Tools in Atlas are \textbf{Data Explorer} and \textbf{Performance Advisor}
+
+
 \printglossaries
+
 \end{document}
+
