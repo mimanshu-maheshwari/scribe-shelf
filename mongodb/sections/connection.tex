@@ -14,12 +14,37 @@ Released in MongoDB 3.6.
 \subsection{Connection String}
 It allows to provide a DNS server list to connection string. Gives more flexibility of deployment.
 Ability to change servers in rotation without reconfiguring clients.
-In atlas it is present in Database tab $\rightarrow$ Connect $\rightarrow$ Connect to application.\\ 
-Connection String: $mongodb+srv://<username>:<password>@cluster0.usqsf.mongodb.net/?retryWrites=true&w=majority$ \\
+\newline
+In atlas it is present in Database tab $\rightarrow$ Connect $\rightarrow$ Connect to application.
+\newline
+Connection String: 
+\lstinline{mongodb+srv://<username>:<password>@cluster0.usqsf.mongodb.net/?retryWrites=true&w=majority}
 If port number is not specified MongoDB will default to $27017$.
+
 \section{Connecting to a MongoDB Atlas Cluster with the Shell}
+mongsh: MongoDB shell is a nodejs \gls{REPL} environment.
+It gives us access to JavaScript variables, functions, conditionals, loops and Control flow statements inside shell.
+\begin{lstlisting}[caption=shell example,language=TypeScript] 
+const greetingArray = ["hello", "world", "welcome"]; 
+const loopArray = (array) => array.forEach(el => console.log(el));
+loopArray(greetingArray);
+\end{lstlisting}
+In atlas it is present in Database tab $\rightarrow$ Connect $\rightarrow$ Connect with the MongoDB Shell.
+\begin{lstlisting}[caption=connect to db,language=bash] 
+atlas clusters connectionStrings describe myAtlasClusterEDU
+MY_ATLAS_CONNECTION_STRING=$(atlas clusters connectionStrings describe myAtlasClusterEDU | sed "1 d")
+mongosh -u myAtlasDBUser -p myatlas-001 &MY_ATLAS_CONNECTION_STRING
+\end{lstlisting}
 
+\section{Connecting to a MongoDB Atlas Cluster with Compass}
+In atlas it is present in Database tab $\rightarrow$ Connect $\rightarrow$ Connect using MongoDB Compass.
 
+\section{Connecting to a MongoDB Atlas Cluster from an Application}
+\subsubsection{MongoDB drivers} 
+Connect our application to our database by using a connect string.
+You can find the \href{mongodb.com/docs/drivers}{\color{blue}{mongodb drivers list here}}.
+
+\section{Troubleshooting MongoDB Atlas Connection Errors}
 
 
 \printglossaries
