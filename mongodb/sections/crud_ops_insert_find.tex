@@ -4,8 +4,149 @@
 \begin{document}
 
 \chapter{MongoDB \gls{CRUD} Operations: Insert and Find Documents}
+\section{Inserting Documents in MongoDB Collections}
+Their are two methods 
+\lstinline {insertOne()} and \lstinline {insertMany()}.
+\newline
+Usage: \lstinline {db.<collection>.insertOn()}.
+If the collection doesn't exist then MongoDB creates the collection when we use \lstinline{insertOne()}.
+Eg: 
+\begin{lstlisting}[caption=insertOne using mongosh, language=JavaScript]
+db.grades.insertOne({
+	student_id: 546799, 
+	scores: [
+		{
+			type: "quiz", 
+			score: 50,
+		},
+		{
+			type: "homework", 
+			score: 70,
+		}
+	]
+})
+\end{lstlisting}
+
+\begin{lstlisting}[caption=output of insertOne using mongosh, language=JSON]
+{
+	acknowledged: true,
+	insertedId: ObjectId("...")
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=insertMany using mongosh, language=JavaScript]
+db.grades.insertMany([
+	{
+		student_id: 546799, 
+		scores: [
+			{
+				type: "quiz", 
+				score: 50,
+			},
+			{
+				type: "homework", 
+				score: 70,
+			}
+		]
+	},
+	{
+		student_id: 546800, 
+		scores: [
+			{
+				type: "quiz", 
+				score: 50,
+			},
+			{
+				type: "homework", 
+				score: 70,
+			}
+		]
+	}
+])
+\end{lstlisting}
+\begin{lstlisting}[caption=output of insertMany using mongosh, language=JSON]
+{
+	acknowledged: true,
+	insertedIds: [
+		'0': ObjectId("..."),
+		'1': ObjectId("..."),
+	]
+}
+\end{lstlisting}
+
+\section{Finding documents in MongoDB Collections}
+Usage: \lstinline{db.<collection>.find()}
+\begin{lstlisting}[caption=find method in mongosh, language=JavaScript]
+	use training; // database 
+	db.zips.find(); // zips are collection 
+	// use "it" for iterating from more result
+\end{lstlisting}
+
+\subsection{eq operator}
+\begin{lstlisting}[language=MongoDB]
+	{ field: { $eq: <value> } }
+	# or
+	{ field: <value> }
+\end{lstlisting}
+
+\subsection{in operator}
+\begin{lstlisting}[language=MongoDB]
+{ field: { $in: [<value1>, <value2>, <value3>,..] } }
+\end{lstlisting}
+
+\section{Finding Documents by using Comparison Operators}
+\subsection{Usage:}
+\begin{lstlisting}[language=MongoDB]
+{ field: { <operator>: <value> } }
+\end{lstlisting}
+\subsection{gt: greater than}
+\begin{lstlisting}[language=MongoDB]
+{ field: { $gt : <value> } }
+\end{lstlisting}
+\subsection{lt: less than}
+\begin{lstlisting}[language=MongoDB]
+{ field: { $lt : <value> } }
+\end{lstlisting}
+\subsection{gte: greater than or equal}
+\begin{lstlisting}[language=MongoDB]
+{ field: { $gte : <value> } }
+\end{lstlisting}
+\subsection{lte: less than or equal}
+\begin{lstlisting}[language=MongoDB]
+{ field: { $lte: <value> } }
+\end{lstlisting}
+
+\section{Querying on Array elements in MongoDB}
+\begin{lstlisting}[language=MongoDB]
+db.accounts.find({"products": "InvestmentStock"})
+\end{lstlisting}
+
+\lstinline{$elemMatch} ensures product field is an array.
+
+\begin{lstlisting}[language=MongoDB]
+db.accounts.find({
+	products: {
+		$elemMatch: {
+			<query1>,
+			<query2>,
+			<query3>,
+			...
+		}
+	}
+})
+\end{lstlisting}
 
 
+\begin{lstlisting}[language=MongoDB]
+db.accounts.find({
+	products: {
+		$elemMatch: { $eq: "InvestmentStock" }
+	}
+})
+\end{lstlisting}
+
+
+\section{Finding Documents by Using Logical Operators}
 
 \printglossaries
 
