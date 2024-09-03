@@ -1,0 +1,157 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+
+\chapter{MongoDB CRUD Operations: Replace and Delete Documents}
+\section{Replacing a Document in MongoDB}
+\subsection{replaceOne()}
+\begin{lstlisting}[language=MongoDB, caption=replaceOne method syntax]
+db.collection.replaceOne(filter, replacement, options)
+\end{lstlisting}
+Example: 
+\begin{lstlisting}[language=MongoDB, caption=replaceOne example]
+db.collection.replaceOne({_id: ObjectId("...")}, {
+	title: "Deep Dive into React Hooks",
+	ISBN: "0-3182-1299-4", 
+	thumbnailUrl: "http://via.placeholder.com/640x360", 
+	publicationData: ISODate("2022-07-28T02:20:21.000Z"),
+	authors: ["Ada Lovelace"],
+})
+\end{lstlisting}
+
+Output: 
+\begin{lstlisting}[language=JSON, caption=replaceOne example output]
+{
+	acknowledged: true, 
+	insertedId: null, 
+	matchedCount: 1, 
+	modifiedCount: 1, 
+	upsertedCount: 0
+}
+\end{lstlisting}
+\section{Updating MongoDB Documents by Using updateOne()}
+
+\begin{lstlisting}[language=MongoDB, caption=updateOne method syntax]
+db.collection.updateOne(<filter>, <udpate>, {options})
+\end{lstlisting}
+
+It has main two methods \lstinline{$set}
+\begin{itemize}
+	\item Adds new fields and values to document.
+	\item Replaces the value of a field with a specified value.
+\end{itemize}
+and \lstinline{$push}
+\begin{itemize}
+	\item Appends a value to an array 
+	\item if absent, \$push adds the array field with the value as its element.
+\end{itemize}
+
+Example: 
+\begin{lstlisting}[language=MongoDB, caption=updateOne example]
+db.podcast.findOne({ title: "the MongoDB Podcast"})
+db.podcast.updateOne(
+	{_id: ObjectId("...")},
+	{ $set: {subscribers: 98563 }}
+)
+\end{lstlisting}
+
+Output: 
+\begin{lstlisting}[language=JSON, caption=updateOne example output]
+{
+	acknowledged: true, 
+	insertedId: null, 
+	matchedCount: 1, 
+	modifiedCount: 1, 
+	upsertedCount: 0
+}
+\end{lstlisting}
+
+\subsection{Upsert}
+Insert a document with provided information if matching documents don't exist.
+the update operations will be carried out.
+Example: 
+\begin{lstlisting}[language=MongoDB, caption=updateOne upsert example]
+db.podcast.updateOne(
+	{title: "The Developer Hub"},
+	{$set: {topics: ["databases", "MongoDB"]}},
+	{upsert: true}
+)
+\end{lstlisting}
+
+Output: 
+\begin{lstlisting}[language=JSON, caption=updateOne upsert example output]
+{
+	acknowledged: true, 
+	insertedId: null, 
+	matchedCount: 0, 
+	modifiedCount: 0, 
+	upsertedCount: 1
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=MongoDB, caption=updateOne push example]
+db.pirate.updateOne( {_id: ObjectId("...")}, {$push: {hosts: "Nico Robin"}})
+\end{lstlisting}
+Output: 
+\begin{lstlisting}[language=JSON, caption=updateOne upsert push output]
+{
+	acknowledged: true, 
+	insertedId: null, 
+	matchedCount: 1, 
+	modifiedCount: 1, 
+	upsertedCount: 0
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=MongoDB, caption=updateOne push each example]
+db.pirate.updateOne( {_id: ObjectId("...")}, {$push: {hosts: {$each: ["Nico Robin", "Brook", "Jimbe"]}}})
+\end{lstlisting}
+
+\begin{lstlisting}[language=MongoDB, caption=updateOne inc example]
+db.pirate.updateOne( {common_name: "Robin Redbreast"}, {$inc: {sightings: 1}, $set: {last_updated: new Date()}},{upsert: true})
+\end{lstlisting}
+
+\section{Updating MongoDB Documents by Using findAndModify()}
+Used to return document that is just updated.
+Ensures that correct version of document is returned after modification.
+As updateOne and findOne will take two trips to update and return the document, but findAndModify will take only one. Hence, ensuring that no other thread has modified the document in between these actions.
+
+\begin{lstlisting}[language=MongoDB, caption=findAndModify method syntax]
+db.collection.findAndModify({
+	query: { _id: ObjectId("...")}, 
+	udpate: {$inc: {downloads: 1}}, 
+	upsert: true,
+	new: true
+})
+\end{lstlisting}
+\lstinline{new} option is set to true so that modified document is returned else the original will be returned.
+
+\section{Updating MongoDB Documents by Using updateMany()}
+
+\begin{lstlisting}[language=MongoDB, caption=updateMany method syntax]
+db.collection.updateMany(<filter>, <update>, <options>)
+\end{lstlisting}
+
+Not and all-or-nothing operations.
+Will not roll back.
+Updates will be visible as soon as they're performed.
+Not appropriate for some use cases such as finance.
+
+\section{Deleting Documents in MongoDB}
+
+\begin{lstlisting}[language=MongoDB, caption=deleteOne method syntax]
+db.collection.deleteOne(<filter>, <options>)
+\end{lstlisting}
+
+\begin{lstlisting}[language=MongoDB, caption=deleteMany method syntax]
+db.collection.deleteMany(<filter>, <options>)
+\end{lstlisting}
+
+
+
+\printglossaries
+
+\end{document}
+
