@@ -12,9 +12,9 @@ Usage: \lstinline {db.<collection>.insertOn()}.
 If the collection doesn't exist then MongoDB creates the collection when we use \lstinline{insertOne()}.
 Eg: 
 \begin{lstlisting}[caption=insertOne using mongosh, language=JavaScript]
-db.grades.insertOne({
-	student_id: 546799, 
-	scores: [
+	db.grades.insertOne({
+		student_id: 546799, 
+		scores: [
 		{
 			type: "quiz", 
 			score: 50,
@@ -23,55 +23,55 @@ db.grades.insertOne({
 			type: "homework", 
 			score: 70,
 		}
-	]
-})
+		]
+	})
 \end{lstlisting}
 
 \begin{lstlisting}[caption=output of insertOne using mongosh, language=JSON]
-{
-	acknowledged: true,
-	insertedId: ObjectId("...")
-}
+	{
+		acknowledged: true,
+		insertedId: ObjectId("...")
+	}
 \end{lstlisting}
 
 \begin{lstlisting}[caption=insertMany using mongosh, language=JavaScript]
-db.grades.insertMany([
+	db.grades.insertMany([
 	{
 		student_id: 546799, 
 		scores: [
-			{
-				type: "quiz", 
-				score: 50,
-			},
-			{
-				type: "homework", 
-				score: 70,
-			}
+		{
+			type: "quiz", 
+			score: 50,
+		},
+		{
+			type: "homework", 
+			score: 70,
+		}
 		]
 	},
 	{
 		student_id: 546800, 
 		scores: [
-			{
-				type: "quiz", 
-				score: 50,
-			},
-			{
-				type: "homework", 
-				score: 70,
-			}
+		{
+			type: "quiz", 
+			score: 50,
+		},
+		{
+			type: "homework", 
+			score: 70,
+		}
 		]
 	}
-])
+	])
 \end{lstlisting}
 \begin{lstlisting}[caption=output of insertMany using mongosh, language=JSON]
-{
-	acknowledged: true,
-	insertedIds: [
+	{
+		acknowledged: true,
+		insertedIds: [
 		'0': ObjectId("..."),
 		'1': ObjectId("..."),
-	]
-}
+		]
+	}
 \end{lstlisting}
 
 \section{Finding documents in MongoDB Collections}
@@ -91,62 +91,120 @@ Usage: \lstinline{db.<collection>.find()}
 
 \subsection{in operator}
 \begin{lstlisting}[language=MongoDB]
-{ field: { $in: [<value1>, <value2>, <value3>,..] } }
+	{ field: { $in: [<value1>, <value2>, <value3>,..] } }
 \end{lstlisting}
 
 \section{Finding Documents by using Comparison Operators}
 \subsection{Usage:}
-\begin{lstlisting}[language=MongoDB]
-{ field: { <operator>: <value> } }
+\begin{lstlisting}[language=MongoDB,caption=Comparison Operators]
+	{ field: { <operator>: <value> } }
 \end{lstlisting}
 \subsection{gt: greater than}
-\begin{lstlisting}[language=MongoDB]
-{ field: { $gt : <value> } }
+\begin{lstlisting}[language=MongoDB, caption=greater than gt]
+	{ field: { $gt : <value> } }
 \end{lstlisting}
 \subsection{lt: less than}
-\begin{lstlisting}[language=MongoDB]
-{ field: { $lt : <value> } }
+\begin{lstlisting}[language=MongoDB, caption=less than lt]
+	{ field: { $lt : <value> } }
 \end{lstlisting}
 \subsection{gte: greater than or equal}
-\begin{lstlisting}[language=MongoDB]
-{ field: { $gte : <value> } }
+\begin{lstlisting}[language=MongoDB, caption= greater than equal gte]
+	{ field: { $gte : <value> } }
 \end{lstlisting}
 \subsection{lte: less than or equal}
-\begin{lstlisting}[language=MongoDB]
-{ field: { $lte: <value> } }
+\begin{lstlisting}[language=MongoDB, caption=less than equal lte]
+	{ field: { $lte: <value> } }
 \end{lstlisting}
 
 \section{Querying on Array elements in MongoDB}
 \begin{lstlisting}[language=MongoDB]
-db.accounts.find({"products": "InvestmentStock"})
+	db.accounts.find({"products": "InvestmentStock"})
 \end{lstlisting}
 
 \lstinline{$elemMatch} ensures product field is an array.
 
-\begin{lstlisting}[language=MongoDB]
-db.accounts.find({
-	products: {
-		$elemMatch: {
-			<query1>,
-			<query2>,
-			<query3>,
-			...
+\begin{lstlisting}[language=MongoDB, caption=elemMatch operator]
+	db.accounts.find({
+		products: {
+			$elemMatch: {
+				<query1>,
+				<query2>,
+				<query3>,
+				...
+			}
 		}
-	}
-})
+	})
 \end{lstlisting}
 
 
 \begin{lstlisting}[language=MongoDB]
-db.accounts.find({
-	products: {
-		$elemMatch: { $eq: "InvestmentStock" }
-	}
-})
+	db.accounts.find({
+		products: {
+			$elemMatch: { $eq: "InvestmentStock" }
+		}
+	})
 \end{lstlisting}
 
 
 \section{Finding Documents by Using Logical Operators}
+\subsection{and operator}
+Explicit syntax:
+\begin{lstlisting}[language=MongoDB,caption=and operator explicit]
+	db.accounts.find({
+		$and: [
+		{<expression>},
+		{<expression>},
+		...
+		]
+	})
+\end{lstlisting}
+
+Implicit syntax:
+\begin{lstlisting}[language=MongoDB, caption=and operator implicit]
+	db.accounts.find({ {<expression>}, {<expression>} })
+\end{lstlisting}
+
+\subsection{and operator}
+\begin{lstlisting}[language=MongoDB,caption=or operator]
+	db.accounts.find({
+		$or: [
+		{<expression>},
+		{<expression>},
+		...
+		]
+	})
+\end{lstlisting}
+
+\subsection{Combining OR and AND}
+Both operators can be combined. 
+But we can not have two fields with same name in same \gls{JSON} object.
+So if we try implicit and with two or queries the first or will be overwritten by second or query.
+\begin{lstlisting}[language=MongoDB]
+	db.accounts.find({
+		$and: [
+		{ $or: [
+			{<expression>},
+			{<expression>},
+			...
+		]},
+		{ $or: [
+			{<expression>},
+			{<expression>},
+			...
+		]}
+		]
+	})
+\end{lstlisting}
+But if we write this in implicit and way: 
+
+\begin{lstlisting}[language=MongoDB]
+	db.accounts.find({
+		$or: [ {<expression>}, {<expression>}, ... ],
+		$or: [ {<expression>}, {<expression>}, ... ]
+	})
+\end{lstlisting}
+It will not give same output as second or will overwrite first or.
+
 
 \printglossaries
 
