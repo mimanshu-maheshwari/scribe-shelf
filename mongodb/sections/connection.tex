@@ -46,6 +46,88 @@ You can find the \href{mongodb.com/docs/drivers}{\color{blue}{mongodb drivers li
 
 \section{Troubleshooting MongoDB Atlas Connection Errors}
 \section{Connecting to MongoDB in Java}
+MongoDB maintians Java Driver for Synchronous and Asynchronous java application code.
+\subsection{Java driver for MongoDB}
+\begin{lstlisting}[caption=pom.xml MongoDB Java Driver,language=XML]
+<properties>
+	<mongodb-driver-sync.version>4.7.1</mongodb-driver-sync.version>
+	<mongodb-crypt.version>1.4.1</mongodb-crypt.version>
+</properties>
+<dependencies>
+	<dependency>
+		<groupId>org.mongodb</groupId>
+		<artifactId>mongodb-driver-sync</artifactId>
+		<version>${mongodb-driver-sync.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.mongodb</groupId>
+		<artifactId>mongodb-crypt</artifactId>
+		<version>${mongodb-crypt.version}</version>
+	</dependency>
+</dependencies>
+\end{lstlisting}
+
+\subsection{Configure the application to use the MongoDB Java Synchronous Driver}
+
+\begin{lstlisting}[caption=Java connection,language=Java]
+package com.mongodb.quickstart;
+
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
+public class Connection {
+	public static void main(String[] args){
+		ConnectionString conncetionString = new ConnectionString("mongodb+srv://student-joe:<password>@sandbox.svlx7.mongodb.net/?retryWrites=true&w=majority");
+		MongoClientSettings settings = MongoClientSettings.builder()
+			.applyConnectionString(connectionString)
+			.serverApi(ServerApi.builder()
+				.version(ServerApiVersion.V1)
+				.build())
+			.build();
+			try(MongoClient mongoClient = MongoClients.create(settings)){
+				MongoDatabase database = mongoClient.getDatabase("admin");
+				database.runCommand(new Document("ping", 1));
+				System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
+			} catch (MongoException e){
+				e.printStackTrace();
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Java client database fetch documents,language=Java]
+package com.mongodb.quickstart;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
+public class Connection {
+	public static void main(String[] args){
+		String conncetionString = System.getProperty("mongodb.uri");
+		try(MongoClient mongoClient = MongoClients.create(connectionString)){
+		MongoClientSettings settings = MongoClientSettings.builder()
+			List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
+			database.forEach(db -> System.out.println(db.toJson()));
+		}
+	}
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption=maven command,language=bash]
+mvn compile exec:java -Dexec.mainClass="com.mongodb.quickstart.Connection" -Dmongodb.uri="mongodb+srv://m001-student:sandbox1995@cluster0.6sfcv.mongodb.net/test?w=majority"
+\end{lstlisting}
+
 
 
 \printglossaries
