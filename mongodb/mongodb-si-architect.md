@@ -78,3 +78,13 @@ Ramakrishna Kappagantula @MongoDB
 - ![Atlas Vector Search](images/atlas_vector_search.png)
 - Separated dedicated nodes for vector search or atlas search
 - CRUD operations in separate nodes.
+
+### Compass:
+
+## ToDo:
+
+- ![](images/todo.png)
+- https://decisiontree-wdqzf.mongodbstitch.com/
+- ![](images/timeline.png)
+- ![](images/select_case_study.png)
+- ![](images/prospective_topics_for_architect_certification.png)
