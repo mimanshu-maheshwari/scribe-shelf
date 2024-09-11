@@ -4,7 +4,12 @@
 \begin{document}
 
 \chapter{MongoDB CRUD Operations: Modifying Query Results}
+
 \section{Sorting and Limiting Query Results in MongoDB}
+\textbf{Cursor} is a pointer to the result set of a query.
+Two method in cursor to sort or limit result of query \lstinline{cursor.sort()} and \lstinline{cursor.limit()}
+\lstinline{db.collection.find()} returns a cursor that points to the documents that match that query.
+Cursor methods which are chained to queries can be used to perform actions on the resulting set.
 \section{Returning Specific Data from a Query in MongoDB}
 \section{Counting Documents in MongoDB Collection}
 
