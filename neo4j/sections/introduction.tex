@@ -1,0 +1,42 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+
+% % Example Cypher query in lstlisting
+% \begin{lstlisting}[language=cypher, caption={Example Cypher Query}]
+% /* Find friends of Alice older than 30 */
+% MATCH (a:Person)-[:KNOWS]->(b:Person)
+% WHERE a.name = "Alice" AND b.age > 30
+% RETURN b.name AS friend, b.age AS age
+% ORDER BY b.age DESC
+% LIMIT 10;
+% 
+% // Create a new person named Bob
+% CREATE (b:Person {name: "Bob", age: 25});
+% 
+% // Set Bob's location
+% MATCH (b:Person {name: "Bob"})
+% SET b.location = "New York";
+% 
+% // Delete relationships for Bob
+% MATCH (b:Person {name: "Bob"})-[r]-()
+% DELETE r
+% \end{lstlisting}
+
+\chapter{Introduction}
+\section{Setting up Neo4j with docker}
+Using official docker setup \href{https://hub.docker.com/_/neo4j}{\color{blue}{link}} for neo4j.
+\begin{lstlisting}[language=bash, caption={get neo4j image}]
+docker pull neo4j
+\end{lstlisting}
+\begin{lstlisting}[language=bash, caption={Starting neo4j container}]
+docker run \
+    --publish=7474:7474 --publish=7687:7687 \
+    --volume=$HOME/neo4j/data:/data \
+    neo4j
+\end{lstlisting}
+
+
+\printglossaries
+\end{document}
