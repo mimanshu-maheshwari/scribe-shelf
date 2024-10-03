@@ -32,10 +32,26 @@ docker pull neo4j
 \end{lstlisting}
 \begin{lstlisting}[language=bash, caption={Starting neo4j container}]
 docker run \
-    --publish=7474:7474 --publish=7687:7687 \
-    --volume=$HOME/neo4j/data:/data \
-    neo4j
+		--publish=7474:7474 --publish=7687:7687 \
+		--volume=$HOME/neo4j/data:/data \
+		neo4j
 \end{lstlisting}
+
+\section{Creating Nodes}
+\begin{lstlisting}[language=cypher, caption={Create Node}]
+CREATE( var: label{key1:value1, key2:value2, key3:value3,...,keyn:valuen})
+\end{lstlisting}
+\begin{itemize}
+	\item{Properties of nodes present between \{ and \}}
+	\item{ 
+			Node present between \( and \)
+			\begin{enumerate}
+				\item{var is the variable name such as John}
+				\item{label is the entity type such as Customer}
+				\item{key:value are the attributes of the properties such as  \lstinline{contact_num: 1234567890}}
+			\end{enumerate}
+		}
+\end{itemize}
 
 
 \printglossaries

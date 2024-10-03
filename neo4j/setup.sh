@@ -10,9 +10,9 @@ type docker>/dev/null 2>&1 || {
 
 NEO4J_IMAGE="neo4j:latest"
 IMAGE_NAME="${NEO4J_IMAGE_NAME:=db_neo4j}"
-DB_PORT="${NEO4J_PORT:=5432}"
+DB_PORT="${NEO4J_PORT:=7474}"
 DB_USER="${NEO4J_USER:=neo4j}"
-DB_PASSWORD="${NEO4J_PASSWORD:=neo4j}"
+DB_PASSWORD="${NEO4J_PASSWORD:=mimanshu}"
 
 # Pull the latest Neo4j image
 echo "Pulling neo4j image..."
