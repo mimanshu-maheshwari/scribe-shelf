@@ -52,7 +52,209 @@ CREATE( var: label{key1:value1, key2:value2, key3:value3,...,keyn:valuen})
 			\end{enumerate}
 		}
 \end{itemize}
+Example: 
+\begin{lstlisting}[language=cypher, caption={Create Node Example}]
+CREATE (b:Bank{name:"Oziku"})
+\end{lstlisting}
 
+
+\section{Creating Relationships}
+\begin{lstlisting}[language=cypher, caption={Create Relationships}]
+CREATE (node1) -[var:Rel_type{key1:value1, key2:value2, ...keyn:valuen}] -> (node2)
+\end{lstlisting}
+Example: 
+\begin{lstlisting}[language=cypher, caption={Create Relation Example}]
+CREATE (BG:Customer { cust_id: 675489, cust_name: "BlackGreyTechnologies", contact_num: 1298764592 })-
+[:Owns]->(AcBG:Account { acc_num: 3498761, cust_id: 675489, type: "checking", balance:958990 })
+\end{lstlisting}
+Nodes, relationships can be created with/without label, properties
+Nodes or relationships can have single or multiple labels
+\section{Defining a constraint}
+Create a unique constraint on \lstinline{cust_id} property of the Customer node as shown below:
+\begin{lstlisting}[language=cypher, caption={constraint}]
+CREATE CONSTRAINT ON (c:Customer) ASSERT c.cust_id IS UNIQUE
+\end{lstlisting}
+\section{MATCH}
+Is used to search for a pattern.
+To return all the nodes created:
+\begin{lstlisting}[language=cypher, caption={Match syntax}]
+MATCH (n) RETURN n
+\end{lstlisting}
+
+\begin{lstlisting}[language=cypher, caption={Match example}]
+MATCH (n:Bank) 
+RETURN n 
+\end{lstlisting}
+
+\begin{lstlisting}[language=cypher, caption={Match example}]
+MATCH (Customer { cust_name: 'BlackGreyTechnologies' })--(Account)
+RETURN Account.acc_num, Account.balance
+\end{lstlisting}
+
+\begin{lstlisting}[language=cypher, caption={Match example}]
+MATCH (city:City {name:"Raleigh"})
+MERGE (state:State{name:"North Carolina"})
+MERGE (city)-[:LOCATED_IN]->(state)
+RETURN city,state
+\end{lstlisting}
+
+\section{Optional Match}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer { cust_id: 675489 })
+OPTIONAL MATCH (c)-[r:having] -()
+RETURN c.cust_name, r.name
+\end{lstlisting}
+
+\section{WHERE}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer), (a:Account)
+WHERE a.type='checking'
+RETURN c.cust_name,a.acc_num,a.balance
+\end{lstlisting}
+
+\section{Merge}
+\begin{lstlisting}[language=cypher]
+MERGE (c:Customer { cust_name: 'Charlie Sheen' })
+RETURN c
+\end{lstlisting}
+
+
+\section{UNION, UNION ALL}
+Union combines the results of multiple queries and removes duplicates whereas Union All performs the same operation but retains duplicates.
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer), (a:Account)
+WHERE a.type='checking'
+RETURN c.cust_name,a.acc_num,a.balance
+UNION
+MATCH (c:Customer { cust_name: 'BlackGreyTechnologies' })--(a:Account)
+RETURN c.cust_name, a.acc_num, a.balance
+\end{lstlisting}
+NOTE: All sub queries must have the same column names.
+
+\section{ORDER BY, SKIP, LIMIT, DISTINCT}
+ORDER BY - specifies how the output of RETURN or WITH should be sorted.
+SKIP - defines from which record to start including the records in the output.
+LIMIT - constraints the number of output records.
+DISTINCT - retrieves only unique rows.
+The below query sorts the Customer node in the ascending order of its customer names, skips the first record and limits the output to only one record:
+\begin{lstlisting}[language=cypher]
+ORDER BY, SKIP, LIMIT, DISTINCT
+\end{lstlisting}
+To retrieve the unique relationships present in the database:
+\begin{lstlisting}[language=cypher]
+MATCH (n)-[r]-()
+RETURN distinct type(r)
+\end{lstlisting}
+
+\section{SET}
+It is used to update node labels and properties of nodes and relationships.
+For example, adding new properties such as email and country to the existing Customer BlackGreyTechnologies:
+
+\begin{lstlisting}[language=cypher, caption={Match example}]
+MATCH (c:Customer {cust_name: 'BlackGreyTechnologies'})  
+SET c.email= 'BGT@blackgrey.com', c.country = 'France' 
+RETURN c
+\end{lstlisting}
+
+
+\section{FOREACH}
+It updates data within a list which can be components of a path* or result of an aggregation
+Path is a directed sequence of nodes and relationships.
+Assume you want to track funds transfer between two accounts suspected to be laundering funds illegally between intermediary accounts.
+\begin{lstlisting}[language=cypher]
+CREATE p = (:Account {acc_num:65178})-[:Funds_transfer]->(:Account
+{acc_num:98567})-[:Fundstransfer]->(:Account{acc_num:46378})-[:Fundstransfer]->(:Account
+{acc_num:95648})-[:Fundstransfer]->(:Account{acc_num:46897})
+RETURN p
+
+MATCH p = (:Account{acc_num:65178})-[*]->(:Account{acc_num:46897}) 
+FOREACH (n IN nodes(p)| SET n.marked = "flaggedFraud")
+
+\end{lstlisting}
+Note: In the above code, [*] is used to define any number of intermediary relationships \lstinline{acc_num=65178 to acc_num=46897}
+In the output shown below, you can observe that a new property \lstinline{marked:"flaggedFraud"} has been added:
+
+\section{REMOVE}
+Is used to remove labels and properties of nodes and relationships.
+
+To remove the email property from Customer having \lstinline{cust_name=BlackGreyTechnologies}:
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer {cust_name: 'BlackGreyTechnologies'}) 
+REMOVE c.email
+RETURN c
+\end{lstlisting}
+
+\section{DELETE}
+Is used to delete nodes, relationships or paths.
+Node cannot be deleted without deleting its associated relationships. Either delete relationships explicitly or use DETACH DELETE that is discussed next.
+\begin{lstlisting}[language=cypher]
+MATCH (n { acc_num: 65178 })-[r:Funds_transfer]->()
+DELETE r
+\end{lstlisting}
+
+\section{DETACH DELETE}
+Is used to delete nodes along with their relationships.
+
+To delete Customer node with \lstinline{name:"BlackGreyTechnologies"} and all its associated links:
+
+\begin{lstlisting}[language=cypher]
+MATCH (a {cust_name: "BlackGreyTechnologies"}) 
+DETACH DELETE a
+\end{lstlisting}
+Delete all the nodes and relationships from the database:
+\begin{lstlisting}[language=cypher]
+MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n,r
+\end{lstlisting}
+
+\section{Bulk Load of Data}
+
+Step 1: 
+To load data from csv file, the below configuration property needs to be added to the neo4j.conf configuration file:
+\lstinline{dbms.security.allow_csv_import_from_file_urls=true}
+
+Step 2:
+Create Bank node, Customer node and ensure that the customer ID is unique as discussed previously.
+
+Step 3:
+Load data from Customer.csv file to Customer node
+\begin{lstlisting}[language=cypher]
+load csv with headers from 'file:///C:/Users/Sahana_Basavaraja/Desktop/Customer.csv' as cust
+merge (c:Customer{cust_id:toInteger(cust.cid),cust_name:cust.cname,contact_num:toInteger(cust.phnum)})
+\end{lstlisting}
+Note: By default, the row retrieved from the file is always string, for example cust. You need to explicitly convert to the appropriate datatypes if required, for example \lstinline{toInteger()} as shown above.
+Establish the relationship between Customer and Bank as \lstinline{Customer_of}:
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer),(b:Bank) merge (c)-[b1:Customer_of]->(b)
+MATCH (n) RETURN n
+CREATE CONSTRAINT ON (a:Account) ASSERT a.acc_num IS UNIQUE
+
+// load data present in account csv
+load csv with headers from 'file:///C:/Users/Sahana_Basavaraja/Desktop/Account.csv' as acc
+merge(a:Account{acc_num:toInteger(acc.acc_num)})
+set 
+a.cust_id=toInteger(acc.cid),
+a.balance=toInteger(acc.balance)
+
+\end{lstlisting}
+Note: Use SET to map columns of the file to properties of the node as illustrated above.
+Establish the relationship between Customer and Account as Owns:
+
+\begin{lstlisting}[language=cypher]
+load csv with headers from 'file:///C:/Users/Sahana_Basavaraja/Desktop/Account.csv' as acc
+match(a:Account{acc_num:toInteger(acc.acc_num)}),(c:Customer{cust_id:toInteger(acc.cid)})
+merge (a)<-[o:Owns]-(c)
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=cypher]
+load csv with headers from 'file:///C:/Users/Sahana_Basavaraja/Desktop/txn.csv' as txn
+match (a:Account), (b:Account)
+where a.acc_num=toInteger(txn.from_acc) AND b.acc_num=toInteger(txn.to_acc) AND toInteger(a.balance)>=toInteger(txn.amount_acc)
+create (a)-[:Funds_transfer{txn_id:toInteger(txn.tid),from_acc:toInteger(txn.from_acc),to_acc:toInteger(txn.to_acc),amount:toInteger
+(txn.amount_acc),txntime:txn.txntime}]->(b)
+\end{lstlisting}
 
 \printglossaries
 \end{document}
