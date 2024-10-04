@@ -1,0 +1,108 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+\chapter{Introduction to RAG}
+\section{What is RAG?}
+\gls{RAG} is a framework or approach within \gls{NLP} that combines both information retrieval and text generation techniques to generate coherent and contextually relevant responses. It retrieves relevant information from a large corpus of text bases on use queries and uses this retrieved information to aid the generation of thoughtful responses.
+
+\gls{RAG} aims to leverage the strengths of retrieval-based systems and generative models to create a hybrid system that can provide thoughtful and accurate responses.
+\begin{itemize}
+	\item{\gls{RAG} is the process of optimizing the output of a large language model, so it references an authoritative knowledge base outside of its training data sources before generating a response.}
+	\item{\gls{RAG} extends the already powerful capabilities of \gls{LLM}s to specific domains or an organization's internal knowledge base, all without the need to retrain the model.}
+	\item{It is a cost-effective approach to improving \gls{LLM} output, so it remains relevant, accurate, and useful in various contexts.}
+\end{itemize}
+It is called \gls{RAG}, as the relevant data get retrieved and will be used to augmented context for the \gls{LLM}.
+
+\section{Problems RAG technique can solve}
+\begin{itemize}
+	\item{\textbf{Contextual Response Generation}: RAG enables the generation of contextually appropriate responses by incorporating relevant contextual information. This is especially useful in dialogue systems, chatbots, and question-answering tasks, where the model needs to understand the user's query and provide meaningful answers.}
+	\item{\textbf{Factually Accurate Text}: By retrieving information from a knowledge base or a large corpus, RAG can help generate text that is more factually accurate and grounded. This is beneficial in applications where providing correct and reliable information is crucial, such as informational queries or content generation}
+	\item{\textbf{Efficiency in Inference}: RAG systems are designed to be more efficient during inference compared to traditional language models. The retrieval step allows the model to quickly fetch relevant information, reducing the computational complexity of generating responses, especially from large datasets.}
+	\item{\textbf{Adaptability to Domains}: RAGs can be fine-tuned and adapted to specific domains or topics. The retrieval module can be tailored to focus on domain-specific information, enabling the model to provide specialized responses in various fields such as medicine, law, or customer support.}
+	\item{\textbf{Handling Explicit Knowledge}: RAGs excel at incorporating explicit knowledge from external sources from a structured knowledge base or dataset. This capability is valuable when the model needs to access specific facts or information, such as in knowledge-based question answering.}
+	\item{\textbf{Human-like Response Behavior}: The retrieval mechanism in RAG mimics the human approach to information gathering. It aligns with how humans would search for relevant facts and then formulate a response, resulting in more human-like and intuitive generated text.}
+\end{itemize}
+
+RAG techniques address several limitations of traditional \gls{LLM} by combining retrieval and generation:
+\begin{itemize}
+	\item{\textbf{Factual Accuracy}: LLMs can struggle with factual accuracy, especially with constantly evolving information. \gls{RAG} retrieves relevant information from a knowledge base, ensuring responses are based on reliable sources.}
+	\item{\textbf{Context Understanding}: While \gls{LLM}s can understand language, they may miss contextual nuances. \gls{RAG} helps by analyzing past interactions and retrieving information specific to the current conversation.}
+	\item{\textbf{Domain Specificity}: \gls{LLM}s offer general knowledge. \gls{RAG} allows for domain-specific information to be added, improving accuracy for tasks like customer support or medical diagnosis.}
+	\item{\textbf{Reduced Hallucination}: \gls{LLM}s can sometimes generate nonsensical responses. By verifying retrieved information, \gls{RAG} reduces the chance of hallucinations.}
+\end{itemize}
+
+\section{Benefits of RAG}
+\begin{itemize}
+	\item{Knowledge Integration for current information: RAG allows developers to integrate explicit external knowledge and provide real-time data from sources like social media or news sites so that, \gls{LLM}s can provide users with the latest and most relevant information. This knowledge base integration enhances the model's ability to incorporate information and provide more accurate and up-to-date responses.}
+	\item{
+			Enhancing User Trust with \gls{RAG}
+			\begin{itemize}
+				\item \gls{RAG} enables \gls{LLM}s to provide accurate information with clear source attribution.
+				\item Users can verify information sources and build trust in the generative \gls{AI} solution.
+			\end{itemize}
+		}
+	\item{
+			Developer Control with \gls{RAG}
+			\begin{itemize}
+				\item Developers have more control over testing, improving, and adapting chat applications with \gls{RAG}.
+				\item Developers can tailor information sources, restrict sensitive information access, and troubleshoot any issues efficiently.
+			\end{itemize}
+		}
+	\item{Efficiency: RAG models are generally more efficient than traditional language models, especially when dealing with large datasets. They separate the processes of information retrieval and generation, allowing for faster inference and response times.}
+	\item{Scalability: RAGs can scale well with the size of the dataset. The retrieval module can help locate relevant information quickly, even from a vast pool of data, enabling the model to handle large corpora effectively.}
+	\item{Adaptability: RAGs can be adapted and fine-tuned to specific domains or tasks with relative ease. By focusing on retrieving relevant information, the model can be tailored to various use cases, such as customer support, medical queries, or legal advice, without requiring extensive retraining.}
+	\item{Better Generalization: The retrieval-based approach enables RAG models to generalize well to unseen data. Since they rely on retrieving relevant information from the dataset, they can handle novel inputs and situations effectively. This capability is especially useful in scenarios where the model needs to provide answers or responses based on real-world knowledge.}
+	\item{Interpretability: RAG models offer more interpretability compared to black-box language models. The retrieval module provides insights into the sources of retrieved information, making it easier to debug and understand the model's decisions. This interpretability can be valuable in domains where transparency and explainability are essential, such as healthcare and legal settings.}
+	\item{Cost-effectiveness: RAGs can be more cost-efficient than training large language models from scratch, as they leverage pre-existing indices or databases. This is especially beneficial for organizations or individuals with limited computational resources.}
+	\item{Flexibility: RAGs allow for more flexibility in updating or expanding the knowledge base. New information can be incorporated into the retrieval module without retraining the entire model, making it adaptable to changing data landscapes.}
+	\item{Human-like Behavior: The retrieval mechanism in RAGs mimics the human approach to gathering information. It aligns with the way humans retrieve relevant facts and then formulate responses, leading to more human-like and coherent generated text.}
+	\item{Potential for Hybrid Models: RAGs can be combined with traditional language models to create hybrid systems, leveraging the strengths of both approaches. This flexibility opens opportunities for innovative model architectures.}
+\end{itemize}
+\subsubsection{\color{red}{Note}}
+
+\begin{itemize}
+	\item While RAG has its advantages, it's important to note that it's not a one-size-fits-all solution. Traditional language models, such as transformer-based models like \gls{BERT} or \gls{GPT}, excel in different aspects of NLP, such as understanding complex language nuances, sentiment analysis, or text classification. The choice between RAG and other models depends on the specific requirements and constraints of the task at hand.
+	\item Researchers and practitioners often explore the potential of RAG in combination with other NLP techniques to build robust and specialized systems for various applications, leveraging its strengths in information retrieval and contextually aware generation.
+\end{itemize}
+
+The choice between RAG and traditional models depends on the specific use case and requirements of the application.
+
+\section{Real World Business Use Cases for RAG}
+\begin{enumerate}
+	\item Enhanced Customer Service Chatbots
+	\item Improved Legal Research and Drafting
+	\item Content Creation with Depth and Accuracy
+	\item Streamlined Summarization and Fact Verification
+\end{enumerate}
+RAG techniques offer a powerful and versatile approach to enhancing the capabilities of LLMs.
+By solving issues with factual accuracy, context understanding, and domain-specificity, RAG paves the way for more reliable, informative, and user-friendly AI applications across various industries.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\printglossaries
+\end{document}
