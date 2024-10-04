@@ -24,7 +24,6 @@
 % DELETE r
 % \end{lstlisting}
 
-\chapter{Introduction}
 \section{Setting up Neo4j with docker}
 Using official docker setup \href{https://hub.docker.com/_/neo4j}{\color{blue}{link}} for neo4j.
 \begin{lstlisting}[language=bash, caption={get neo4j image}]
@@ -255,6 +254,189 @@ where a.acc_num=toInteger(txn.from_acc) AND b.acc_num=toInteger(txn.to_acc) AND 
 create (a)-[:Funds_transfer{txn_id:toInteger(txn.tid),from_acc:toInteger(txn.from_acc),to_acc:toInteger(txn.to_acc),amount:toInteger
 (txn.amount_acc),txntime:txn.txntime}]->(b)
 \end{lstlisting}
+
+\section{Functions}
+\subsection{toLower()}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer) RETURN toLower(c.cust_name) LIMIT 1
+\end{lstlisting}
+
+\subsection{toUpper()}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer) RETURN toUpper(c.cust_name) LIMIT 1
+\end{lstlisting}
+
+\subsection{substring()}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer) RETURN SUBSTRING(c.cust_name,0,5) LIMIT 1
+\end{lstlisting}
+
+\subsection{replase()}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer{cust_name:"BlackGreyTechnologies"}) RETURN replace("BlackGreyTechnologies","Grey","Gradient")
+\end{lstlisting}
+
+\subsection{reverse()}
+\begin{lstlisting}[language=cypher]
+MATCH (c:Customer) RETURN reverse(c.cust_name) LIMIT 1
+\end{lstlisting}
+
+\subsection{Aggregate function}
+It is similar to GROUP BY clause in SQL. It takes multiple values as arguments, performs computation on it and returns the computed value.
+
+\begin{itemize}
+	\item{sum() - returns the sum of a set of values}
+	\item{avg() - returns the average of a set of values}
+	\item{count() - returns number of rows or values}
+	\item{max() - returns maximum value in set of values}
+	\item{min() - returns minimum value in set of values}
+\end{itemize}
+ 
+
+The frauds do not transfer amount in one single transaction.
+Multiple transactions would take place in order to hide the transit of illegally obtained money.
+
+The below query retrieves the details of the account number having highest \lstinline{total_amount} transferred in a series that is greater than 20K:
+\begin{lstlisting}[language=cypher]
+MATCH (a)-[r:Funds_transfer]->(b)
+WITH r.to_acc AS account_number,
+count(r.to_acc) as total_txn_to_acc,
+sum(r.amount) as total_amount
+WHERE total_amount >20000
+RETURN account_number,total_amount,total_txn_to_acc
+ORDER BY total_amount DESC
+LIMIT 1
+\end{lstlisting}
+
+\subsection{List functions}
+It returns a list of nodes and relationships in a path, labels, keys.
+
+\begin{itemize}
+	\item{keys() - returns a list of property names of a node, relationship or map}
+	\item{labels() - returns a list of all the labels of a node}
+	\item{nodes() - returns a list of all nodes in a path}
+	\item{relationships() - returns a list of all relationships in a path}
+\end{itemize}
+To retrieve the list of distinct labels and its respective property keys:
+\begin{lstlisting}[language=cypher]
+MATCH (n)
+RETURN labels(n), keys(n)
+\end{lstlisting}
+
+\section{User defined functions(UDF) in Neo4J}
+Neo4J has many built-in functions. In order to extend the functionalities of Neo4J, you can create your own UDFs  in Java.
+\subsection{UDFs in Neo4J}
+\begin{itemize}
+	\item{are read-only and always returns a single-value}
+	\item{is annotated with \lstinline{@UserFunction}}
+	\item{valid input types and output types are \lstinline{string, long, double, boolean, node, relationship, path, object, map<K(string),V>, list}}
+	\item{is called as \lstinline{package-name.method-name}}
+\end{itemize}
+From the Account node, retrieve the average balance amount.
+\begin{lstlisting}[language=java]
+package com.infy.bda;
+import java.util.List;
+import org.neo4j.procedure.Description;
+import org.neo4j.procedure.Name;
+import org.neo4j.procedure.UserFunction;
+public class AverageBalance {
+    @UserFunction
+    @Description("com.infy.bda.AverageBalance([0.5,1,2.3]) returns the average of the given list of values")
+    public double avg(@Name("numbers") List<Number> list) {
+        double avg = 0;
+        for (Number number : list) {
+            avg += number.doubleValue();
+        }
+        return (avg/(double)list.size());
+    }
+}
+\end{lstlisting}
+
+\subsection{Deploying UDF}
+UDFs are packaged in a jar file. You have to copy the jar file into the plugins directory of your Neo4J server and restart.
+\subsection{Calling a UDF}
+Before calling the UDF, to see the list of UDFs deployed in your server, use the following command:
+\begin{lstlisting}[language=cypher]
+CALL dbms.functions()
+\end{lstlisting}
+User-defined functions are called in the same way as any other Cypher function. The function name must be fully qualified, that is, a function named avg defined in the package \lstinline{com.infy.bda} is called using: 
+\begin{lstlisting}[language=cypher]
+MATCH(a:Account)
+RETURN com.infy.bda.avg(collect(a.balance))
+\end{lstlisting}
+
+
+\section{Optional Schema Indexes and constraints}
+\subsection{Analyze query performance using EXPLAIN}
+Query performance can be analysed using the EXPLAIN clause. It provides the execution plan for the Cypher query.
+Consider the below query that retrieves the Customer node having \lstinline{cust_name:"George Clooney"}:
+\begin{lstlisting}[language=cypher]
+EXPLAIN
+MATCH(c:Customer{cust_name:"George Clooney"})
+RETURN c
+\end{lstlisting}
+Few properties generated from the output of EXPLAIN command are explained below:
+\begin{itemize}
+	\item NodeByLabelScan: Scanning the nodes based on a specific label
+	\item Filter: Conditional expression
+\end{itemize}
+\subsection{Improve performance using indexes}
+\subsubsection{Create Index:}
+\begin{lstlisting}[language=cypher]
+CREATE INDEX ON :Label(property) //Index on single property 
+CREATE INDEX ON :Label(property1, property2, ...,propertyn) //Index on multiple properties
+\end{lstlisting}
+Example:
+\begin{lstlisting}[language=cypher]
+CREATE INDEX ON :Customer(cust_name)
+\end{lstlisting}
+\subsubsection{View Index:}
+\begin{lstlisting}[language=cypher]
+CALL db.indexes()
+\end{lstlisting}
+
+\subsubsection{Drop Index:}
+\begin{lstlisting}[language=cypher]
+DROP INDEX ON :Label(property)
+DROP INDEX ON :Label(property1, property2, .....propertyn)
+\end{lstlisting}
+Example: 
+\begin{lstlisting}[language=cypher]
+DROP INDEX ON :Customer(cust_name)
+\end{lstlisting}
+
+\section{Working with constraints}
+Data integrity in Neo4J can be enforced using constraints. Two types of constraints can be created:
+\begin{itemize}
+	\item Unique node property constraint
+	\item Property and relationship existence constraint\footnote{\small{Available only in the Neo4J Enterprise Edition.}}
+\end{itemize}
+\subsection{Unique node property constraint}
+It ensures that property values for all nodes corresponding to a particular label are unique.
+\subsubsection{Creation of unique node constraint}
+Earlier in the course, you have created a unique constraint on the \lstinline{cust_id} property of the Customer node as shown below:
+\begin{lstlisting}[language=cypher]
+CREATE CONSTRAINT ON (c:Customer) ASSERT c.cust_id IS UNIQUE
+\end{lstlisting}
+NOTE: 
+\begin{itemize}
+\item Nodes without the property used in the constraint will have no effect
+\item Creation of unique property constraint will also create index on that property
+\end{itemize}
+\subsubsection{Drop unique constraint:}
+Use DROP CONSTRAINT clause to remove a constraint from the database as shown below:
+\begin{lstlisting}[language=cypher]
+DROP CONSTRAINT ON (c:Customer) ASSERT c.cust_id IS UNIQUE
+\end{lstlisting}
+Note: Dropping the constraint will also remove the index created.
+
+
+
+
+
+
+
+
 
 \printglossaries
 \end{document}

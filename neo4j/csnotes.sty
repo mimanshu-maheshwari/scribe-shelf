@@ -47,34 +47,34 @@
 \colorlet{numb}{magenta!60!black}
 
 \lstdefinelanguage{JavaScript}{
-  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-  keywordstyle=\color{blue}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
-  identifierstyle=\color{black},
-  sensitive=false,
-  comment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
-  morestring=[b]',
-  morestring=[b]"
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
 }
 
 
 \lstdefinelanguage{Typescript}{
-  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-  keywordstyle=\color{blue}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
-  identifierstyle=\color{black},
-  sensitive=false,
-  comment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
-  morestring=[b]',
-  morestring=[b]"
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
 }
 
 \lstdefinelanguage{json}{
@@ -393,73 +393,91 @@
 
 %% MongoDB lst listing
 \lstdefinelanguage{MongoDB}{
-    morekeywords={
-        db, find, insertOne, insertMany, updateOne, updateMany, deleteOne, deleteMany,
-        createIndex, aggregate, match, project, group, lookup, pipeline, collection, 
-        connect, use, show, databases, collections, stats, upsert, true, false, new, Date
-				\$gt, \$gte, \$lt, \$lte, \$elemMatch, \$eq, \$in, \$and, \$or, \$set, \$push, \$each, \$inc
-    },
-    sensitive=true,
-    morecomment=[l]{//},
-    morestring=[b]',
-    morestring=[b]",
-    keywordstyle=\color{blue},
-    commentstyle=\color{gray}\ttfamily,
-    stringstyle=\color{green}\ttfamily,
-    basicstyle=\ttfamily,
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=8pt,
-    backgroundcolor=\color{lightgray!10},
-    tabsize=4,
-    showspaces=false,
-    showstringspaces=false,
-    breaklines=true,
-    breakatwhitespace=true,
-    captionpos=b,
+	morekeywords={
+		db, find, insertOne, insertMany, updateOne, updateMany, deleteOne, deleteMany,
+		createIndex, aggregate, match, project, group, lookup, pipeline, collection, 
+		connect, use, show, databases, collections, stats, upsert, true, false, new, Date
+		\$gt, \$gte, \$lt, \$lte, \$elemMatch, \$eq, \$in, \$and, \$or, \$set, \$push, \$each, \$inc
+	},
+	sensitive=true,
+	morecomment=[l]{//},
+	morestring=[b]',
+	morestring=[b]",
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray}\ttfamily,
+	stringstyle=\color{green}\ttfamily,
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=8pt,
+	backgroundcolor=\color{lightgray!10},
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false,
+	breaklines=true,
+	breakatwhitespace=true,
+	captionpos=b,
 }
 
 % Define the Cypher language for lstlisting with all settings
 \lstdefinelanguage{cypher}{
-    morekeywords={
-        MATCH, OPTIONAL, WHERE, RETURN, CREATE, DELETE, DETACH, SET, MERGE, WITH, 
-        LIMIT, ORDER, BY, SKIP, ASC, DESC, AS, DISTINCT, UNION, ALL, AND, OR, NOT, 
-        ON, FOREACH, CASE, WHEN, THEN, ELSE, END, REMOVE, UNWIND, CALL, YIELD, 
-    },
-    keywordstyle=\color{blue}\bfseries,
-    morekeywords=[2]{
-        true, false, null
-    },
-    keywordstyle=[2]\color{teal}\bfseries,
-    morekeywords=[3]{
-        COUNT, avg, min, max, sum, collect, exists, keys, labels, type, id, load, csv, with, headers, merge, set
-    },
-    keywordstyle=[3]\color{orange}\bfseries,
-    morestring=[b]",
-    stringstyle=\color{red},
-    morecomment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    commentstyle=\color{gray}\itshape,
-    sensitive=true,
-    basicstyle=\ttfamily\small,
-    columns=flexible,
-    breaklines=true,
-    frame=single,
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=8pt,
-    showstringspaces=false,
-    tabsize=2,
-    identifierstyle=\color{black},
-    backgroundcolor=\color{white},
-    rulecolor=\color{black},
-    xleftmargin=10pt,
-    xrightmargin=10pt,
-    captionpos=b,
-    aboveskip=10pt,
-    belowskip=10pt,
+	morekeywords={
+		MATCH, OPTIONAL, WHERE, RETURN, CREATE, DELETE, DETACH, SET, MERGE, WITH, 
+		LIMIT, ORDER, BY, SKIP, ASC, DESC, AS, DISTINCT, UNION, ALL, AND, OR, NOT, 
+		ON, FOREACH, CASE, WHEN, THEN, ELSE, END, REMOVE, UNWIND, CALL, YIELD, PROFILE, USING, SCAN, INDEX, PERIODIC COMMIT,
+		match, optional, where, return, create, delete, detach, set, merge, with, 
+		limit, order, by, skip, asc, desc, as, distinct, union, all, and, or, not, 
+		on, foreach, case, when, then, else, end, remove, unwind, call, yield, profile, using, scan, index, periodic commit
+	},
+	keywordstyle=\color{blue}\bfseries,
+	morekeywords=[2]{
+		COUNT, true, false, with, null, csv, CONSTRAINT, db, dbms, count, from, FROM,
+	},
+	keywordstyle=[2]\color{teal}\bfseries,
+	morekeywords=[3]{
+		avg, min, max, sum, collect, exists, keys, labels, type, id, load, headers, functions, nodes, relationships, transaction, timeout
+	},
+	keywordstyle=[3]\color{orange}\bfseries,
+	morestring=[b]",
+	stringstyle=\color{red},
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{gray}\itshape,
+	sensitive=true,
+	basicstyle=\ttfamily\small,
+	columns=flexible,
+	breaklines=true,
+	frame=single,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	tabsize=2,
+	identifierstyle=\color{black},
+	backgroundcolor=\color{white},
+	rulecolor=\color{black},
+	xleftmargin=10pt,
+	xrightmargin=10pt,
+	captionpos=b,
+	% alsoletter={:},
+	aboveskip=10pt,
+	belowskip=10pt,
+	literate=
+	*{:}{{{\color{red}{:}}}}{1}
+	{,}{{{\color{red}{,}}}}{1}
+	{.}{{{\color{red}{.}}}}{1}
+	{=}{{{\color{red}{=}}}}{1}
+	{>}{{{\color{red}{>}}}}{1}
+	{<}{{{\color{red}{<}}}}{1}
+	{-}{{{\color{red}{-}}}}{1}
+	{\{}{{{\color{delim}{\{}}}}{1}
+	{\}}{{{\color{delim}{\}}}}}{1}
+	{[}{{{\color{delim}{[}}}}{1}
+	{]}{{{\color{delim}{]}}}}{1}
+	{(}{{{\color{delim}{(}}}}{1}
+	{)}{{{\color{delim}{)}}}}{1},
 }
 
 
