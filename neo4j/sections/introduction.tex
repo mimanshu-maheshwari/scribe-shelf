@@ -430,8 +430,80 @@ DROP CONSTRAINT ON (c:Customer) ASSERT c.cust_id IS UNIQUE
 \end{lstlisting}
 Note: Dropping the constraint will also remove the index created.
 
+\section{Using Neo4J with Java}
+Neo4J provides developer kits for various languages like Java, .NET, Python, PHP, Go, C and so on. Below code can be used to access Neo4J server from Java application using Neo4J's binary Bolt\footnote{Bolt protocol is a connection oriented network protocol used for client-server communication in database applications. By default, it runs on 7687 port.} protocol.
+You can copy paste the following code in Eclipse and include \href{https://mvnrepository.com/artifact/org.neo4j/neo4j}{\color{blue}{neo4j}} and \href{https://mvnrepository.com/artifact/org.neo4j.driver/neo4j-java-driver}{\color{blue}{neo4j-java driver}} jars.
+\begin{lstlisting}[language=java, caption={Neo4J with java}]
+package com.infy;
 
+import org.neo4j.driver.v1.AccessMode;
+import org.neo4j.driver.v1.AuthTokens;
+import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.GraphDatabase;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
+import static org.neo4j.driver.v1.Values.parameters;
+import java.util.ArrayList;
+import java.util.List;
 
+public class NeoJavaDemo implements AutoCloseable {
+    private Driver driver;
+
+    public NeoJavaDemo( String uri, String user, String password ) {
+        this.driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
+    }
+
+    @Override
+    public void close() throws Exception {
+        this.driver.close();
+    }
+    
+    // Create a Bank node
+    private StatementResult addBank( final Transaction tx, final String name ) {
+        return tx.run( "CREATE (:Bank {name: $name})", parameters( "name", name ) );
+    }
+    
+    // Create a Customer node
+    private StatementResult addCustomer( final Transaction tx, final String cust_name ) {
+        return tx.run( "CREATE (:Customer {cust_name: $cust_name})", parameters( "cust_name", cust_name ) );
+    }
+    
+    // Create a customer_of relationship to a pre-existing bank node.
+    // This relies on the customer first having been created.
+    private StatementResult cust( final Transaction tx, final String customer, final String bank ) {
+     return tx.run( "MATCH (c:Customer {cust_name: $cust_name}) " +
+                     "MATCH (b:Bank {name: $name}) " +
+                     "CREATE (c)-[:Customer_of]->(b)",
+             parameters( "cust_name", customer, "name", bank ) );
+    }
+    
+    public void addCustomerAndBank() {
+        // To collect the session bookmarks
+        List<String> savedBookmarks = new ArrayList<>();
+        // Create the first customer and bank relationship.
+        try ( Session session1 = this.driver.session( AccessMode.WRITE ) ) {
+            session1.writeTransaction( tx -> addBank( tx, "Oziku" ) );
+            session1.writeTransaction( tx -> addCustomer( tx, "George" ) );
+            session1.writeTransaction( tx -> cust( tx, "George", "Oziku" ) );
+            savedBookmarks.add( session1.lastBookmark() );
+        }
+    }
+    
+    public static void main( String[] args ) throws Exception {
+        try ( NeoJavaDemo g = new NeoJavaDemo( "bolt://localhost:7687", "neo4j", "Infy@123#" ) ) {
+            g.addCustomerAndBank();
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\item The above Neo4J client connects to the Neo4J server running on localhost with \lstinline{neo4j} and \lstinline{Infy@123#} as username and password respectively.
+	\item To connect to a remote Neo4J server, replace localhost with the server's hostname and provide relevant username and password.
+\end{itemize}
+
+For more details view \href{https://neo4j.com/docs/driver-manual/1.7/}{\color{blue}{Neo4J Drivers}}.
 
 
 
