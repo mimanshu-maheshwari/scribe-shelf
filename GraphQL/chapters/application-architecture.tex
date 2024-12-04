@@ -1,0 +1,65 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\chapter{GraphQL Application Architecture: An Overview}
+\section{Various GraphQL architecture approaches}
+\subsection{GraphQL application architecture}
+GraphQL is just a specification that set out how a GraphQL server should behave.
+This essentially means, a set of guidelines will be defined by any GraphQL based application - on how requests and responses to be handled by the server.
+
+
+The guidelines generally include:
+\begin{itemize}
+  \item What are the supported protocols?
+  \item Which format of data can be acceptable for the server?
+  \item Which format of response is possible for the server to return? etc.
+\end{itemize}
+
+\subsubsection{The GraphQL mindset}
+The request from a GraphQL client to the GraphQL server is known as Query.
+GraphQL is transport-layer agnostic. That is, GraphQL actually is agnostic with respect to how data flows over the network. GraphQL server can work with protocols other than HTTP as well. To quote a few, WebSockets and TCP. But, the most widely used one is HTTP indeed.
+GraphQL is neutral to databases. That is, we are free to use GraphQL with SQL or NoSQL databases or even the combination of both!
+
+\subsubsection{Various GraphQL app architecture possibilities}
+A GraphQL server can be created using either of the methods being listed below –
+
+\begin{enumerate}
+\item GraphQL server with a connected database
+\item GraphQL server that integrates existing (possibly legacy) systems
+\item Hybrid approach – which is a mix of the above two approaches
+\end{enumerate}
+
+\subsection{GraphQL Server with Connected Database}
+In this architecture, we can find GraphQL Servers with a tightly coupled/integrated database.
+Upon receiving a query from the client, the GraphQL server will first make sure reading the request payload and then fetching the required data from the database.
+This is known as resolving the query which in turn results in a response from the GraphQL server.
+The response is returned to the client and it adheres to the format being specified in the GraphQL specification that is provided by the Schema and the Type system.
+This kind of architecture can often be used in projects that start from scratch.
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=150mm]{GQLArchi11601287761696.png}}
+\caption{GraphQL Server with a Connected DataBase}
+\label{fig:GraphQL-Server-with-a-Connected-DataBase}
+\end{figure}
+
+In the diagram being shown above, the GraphQL server and the database (SQL or NoSQL) are made to be available on a single node. The Client (desktop or mobile) communicates with the GraphQL server over HTTP. The server processes the request fetches/retrieve data from the DB and, returns it finally to the client.
+
+\subsection{GraphQL server integrating the existing Systems}
+This approach would be much helpful for the companies that have legacy infrastructure and possess a collection of different APIs. GraphQL can be employed in this kind of architecture to unify microservices, legacy infrastructure, and even third-party APIs.
+Observe the below block diagram:
+
+\begin{figure}[h!]
+\centerline{\includegraphics[width=150mm]{GQLArchi21601287889595.png}}
+\caption{GraphQL server integrating the existing Systems}
+\label{fig:GraphQL-server-integrating-the-existing-Systems}
+\end{figure}
+
+In the given diagram, GraphQL Server acts as an interface between the client and the existing systems. Client applications reach out to the GraphQL server which in turn, resolves the query and gets data from the existing APIs, and renders the response back to the client applications.
+
+
+
+
+
+\printglossaries
+\end{document}

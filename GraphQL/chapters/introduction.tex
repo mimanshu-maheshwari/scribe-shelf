@@ -73,7 +73,7 @@ Using GraphQL, we can create a query similar to the one being shown below.
   }
 }
 \end{lstlisting}
-Listing  \ref{lst:fetch-employee-id-first-name} is a basic example of usage.
+% Listing  \ref{lst:fetch-employee-id-first-name} is a basic example of usage.
 Now, this query shall return the values of the \lstinline{id} and \lstinline{firstName} fields alone and will ignore other attributes like \lstinline{lastName} and \lstinline{technologyName} of the employee object.
 Observe the response for the above query:
 \begin{lstlisting}[language=json, caption = {Employee fetch id and name only response}, label={lst:fetch-emp-id-1-name-resp}]
@@ -94,10 +94,103 @@ Observe the response for the above query:
 \end{lstlisting}
 
 
+\section{Get many resources in a single request}
 
+GraphQL queries can help us smoothly retrieve multiple resources in a single request. In contrast to this, a typical REST API might require loading data from multiple URLs.
+Since the API calls are optimized to a great extent, applications that use GraphQL can perform faster even on a slow mobile network connection!
+The following example can make us understand this concept even better.
+Let us consider an object employee that has fields like id, firstName, lastName, jobLevel and companyId.
+Let us consider another object, Company which has attributes – name, and description.
+The employee resource can be provided by the endpoint, \lstinline{/api/v1/employees} and the company resource can be provided by the endpoint, \lstinline{/api/v1/companies}.
+If the client wants both employee and company details, the client should two calls, on to fetch the employee details (\lstinline{/api/v1/employees}) and the other to fetch the company details (\lstinline{/api/v1/companies}).
+This is nothing but under-fetching of data where multiple calls are required to fetch the needed information. Hence, applications are forced to give multiple calls to the server to get the data that is required.
+However, GraphQL can help an application to fetch details for both Employee and Company in a single request.
+Observe the below GraphQL query to fetch the employee and the company together.
+\begin{lstlisting}[language=GraphQL, label={lst:fetch-multiple-resource-in-single-query}, caption={fetch multiple resource in single query}]
+query
+{
+   employees{firstName,lastName,jobLevel},
 
+   companies{id,name,description}
+}
 
+\end{lstlisting}
 
+\begin{lstlisting}[language=json, label={lst:fetch-multiple-resource-in-single-query-response}, caption={fetch multiple resource in single query response}]
+  {
+    "data": {
+      "employees": [
+      {
+        "firstName": "Steffy",
+        "lastName": "Mayor",
+        "jobLevel": 5
+      }
+      {
+        "firstName": "Steffy2",
+        "lastName": "Mayor2",
+        "jobLevel": 6
+      }
+      ],
+      "companies": [
+      {
+        "id": "C232",
+        "name": "Product Company",
+        "description": "Tech Ex"
+      }
+      {
+        "id": "C233",
+        "name": "Tech Company",
+        "description": "Infy"
+      }
+      ]
+    }
+  }
+\end{lstlisting}
+
+\section{Describe what’s possible with a type system}
+GraphQL is strongly typed. 
+GraphQL queries are based on the fields and their associated data types.
+If there is a type mismatch in a GraphQL query, the server applications will return error messages that are very clear and much helpful to the clients to introspect further in way smoother.
+Along with this, GraphQL provides various client-side libraries that actually can help to reduce explicit way of data conversion and parsing.
+
+\begin{lstlisting}[language=GraphQL, label={lst:graphql-sample-typing}, caption={Example of GraphQL typing}]
+  type Query {
+    employees: [Employee]
+  }
+  type Employee {
+
+    id: ID!
+    firstName: String
+    lastName: String
+    fullName: String
+    company: Company
+  }
+  type Company {
+    id: ID!
+    name: String
+    description: String
+    rating: Float
+    employees: [Employee]
+  }
+
+\end{lstlisting}
+
+\section{Hit the ground running with powerful developer tools}
+GraphQL offers a decent number of developer tools that can help to document the APIs and testing the queries.
+
+\begin{itemize}
+  \item \textbf{GraphiQL} is a wonderful tool that can help us generate documentation for the query and the schema to which the query belongs. It also provides a query editor to test our GraphQL APIs. Apart from these, GraphiQL has an intelligent code completion capability that helps us quickly build our queries.
+  \item \textbf{GraphQL Voyager} is yet another tool that can help us represent/depict a GraphQL API as an interactive graph! GraphQL Voyager's motto is – “It's time to finally see the graph behind GraphQL”!  It also lets us explore several public GraphQL APIs from its list. It also includes a wide range of examples of GraphQL schemas and allows us to connect them to our own GraphQL endpoints.
+  \item \textbf{Apollo SandBox}:  A unique Apollo Studio mode which is a web IDE for creating, running and managing graphQL operations called Apollo Sandbox aids with local development.
+\end{itemize}
+GraphQL is a server-side runtime and a query language for the APIs. 
+
+\begin{itemize}
+\item No over and under fetching – Ask for what is required and get that alone.
+\item A single request can help to retrieve multiple resources.
+\item Describes well what’s possible with a well-structured type system to help the clients understand the API better.
+\item Move faster - in the sense of rapid API development with the help of powerful developer tools.
+\end{itemize}
 
 \printglossaries
 \end{document}
