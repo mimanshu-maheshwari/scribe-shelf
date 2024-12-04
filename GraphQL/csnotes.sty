@@ -480,6 +480,44 @@
 	{)}{{{\color{delim}{)}}}}{1},
 }
 
+% GraphQL language definition
+\lstdefinelanguage{GraphQL}{
+  keywords={query, mutation, subscription, fragment, on, type, interface, input, enum, schema, directive, implements, scalar, extend, union, true, false, null},
+  sensitive=true,
+  morestring=[b]",
+  morestring=[b]',
+  morecomment=[l]{\#},
+  morekeywords=[2]{\$gt, \$gte, \$lt, \$lte, \$elemMatch, \$eq, \$in, \$and, \$or, \$set, \$push, \$each, \$inc},
+  keywordstyle=\color{blue}\bfseries,          % Main keyword style
+  keywordstyle=[2]\color{purple}\bfseries,    % MongoDB-style operators in purple
+  stringstyle=\color{teal},                   % String style
+  commentstyle=\color{gray}\itshape,          % Comment style
+  identifierstyle=\color{black},              % Default identifier style
+  basicstyle=\ttfamily\small,                 % Basic text style
+  backgroundcolor=\color{lightgray!10},       % Light gray background
+  frame=single,                               % Add a border around the code
+  rulecolor=\color{gray},                     % Border color
+  tabsize=2,                                  % Tab width
+  breaklines=true,                            % Break long lines
+  showstringspaces=false,                     % Don't show spaces in strings
+  keepspaces=true,                            % Preserve spaces and indentation
+  literate=                                  % Customize syntax coloring for special characters
+    *{:}{{{\color{red}{:}}}}{1}
+    {,}{{{\color{red}{,}}}}{1}
+    {.}{{{\color{red}{.}}}}{1}
+    {=}{{{\color{red}{=}}}}{1}
+    {>}{{{\color{red}{>}}}}{1}
+    {<}{{{\color{red}{<}}}}{1}
+    {-}{{{\color{red}{-}}}}{1}
+    {\{}{{{\color{red}{\{}}}}{1}          % Preserve {
+    {\}}{{{\color{red}{\}}}}}{1}          % Preserve }
+    {[}{{{\color{red}{[}}}}{1}            % Preserve [
+    {]}{{{\color{red}{]}}}}{1}            % Preserve ]
+    {(}{{{\color{red}{(}}}}{1}            % Preserve (
+    {)}{{{\color{red}{)}}}}{1}            % Preserve )
+}
+
+
 
 %\pagestyle{fancy}
 %\fancyhead[l]{Mimanshu Maheshwari}
