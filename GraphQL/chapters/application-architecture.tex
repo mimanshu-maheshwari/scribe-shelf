@@ -80,8 +80,31 @@ Any GraphQL server will contain the following components.
   \item { \textbf{Query}: GraphQL query is nothing but the request being initiated by the GraphQL client to the GraphQL server. The response to the request can be from various data sources like databases or other legacy REST APIs. An important point to be noted here is, GraphQL query is \textbf{declarative} (easy for us to predict the content that will be received by the client on seeing the query itself) by nature and helps to query the GraphQL server in a precise manner.}
   \item { \textbf{Resolver}: Resolvers are nothing but the entities which provide instructions that are required to turn a GraphQL query/operation into data. They actually “resolve” the query and return data by defining various resolver functions that correspond to the schema.}
 \end{enumerate}
+
 These server-side components help the GraphQL server to parse the queries that are coming from the GraphQL client applications and to generate the relevant response. 
 We are aware that GraphQL is a specification and has got multiple implementations. We have a variety of languages supporting the creation of the GraphQL server. In this course, we shall see the Spring Boot way of creating a GraphQL server.
+
+\subsection{GraphQL Application Components - Client Side}
+Like server-side components, there are various components on the client-side as well. Take a look at the below client-side components.
+
+\begin{enumerate}
+
+  \item {\textbf{GraphQL Playground}: A browser-based interface that helps to edit and testing GraphQL queries/mutations/subscriptions. }
+  \item {\textbf{Apollo Client}: Tool/library that helps to build GraphQL client applications and can integrate well with any JavaScript-based front-end. }
+  \item {\textbf{Postman}: Tool to test REST API endpoints. The recent versions of Postman have support for sending GraphQL queries as well. }
+
+\end{enumerate}
+
+We have got an idea of GraphQL's client and server-side components. Before getting deeper, let's have a look at how happens the interaction between a GraphQL client and the GraphQL server (Spring Boot based).
+
+\begin{itemize}
+\item {The web server can be built on Spring Boot.}
+\item {A request is made to the Spring Boot GraphQL Server by a GraphQL client. The client application can either be a ReactJS application (the one that is built with the help of Apollo Client library) or GraphQL playground or even GraphiQL browser application.}
+\item {The query will get parsed and validated against the schema that is defined in the server.}
+\item {If the request passes the validation, the associated resolver methods will be executed.}
+\item {The resolver-contained code then will fetch data from a database or an API.}
+\item {Finally, the result gets rendered back to the client that initiated the request.}
+\end{itemize}
 
 \printglossaries
 \end{document}
