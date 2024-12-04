@@ -57,9 +57,31 @@ Observe the below block diagram:
 
 In the given diagram, GraphQL Server acts as an interface between the client and the existing systems. Client applications reach out to the GraphQL server which in turn, resolves the query and gets data from the existing APIs, and renders the response back to the client applications.
 
+\subsection{Hybrid Approach}
+Finally, we can put the first two approaches together that is, the dedicated DB approach and the integrated legacy systems approach, to build a GraphQL server. In this architecture, the GraphQL server shall resolve the requests being received. It will then, retrieve data either from the connected database or from the integrated APIs.
 
+\begin{figure}[h!]
+\centerline{\includegraphics[width=150mm]{GQLArchi31601287943645.png}}
+\caption{Hybrid Approach}
+\label{fig:Hybrid-Approach}
+\end{figure}
 
+\section{GraphQL Application Components}
+Just like any other full-stack application, a GraphQL based application will also have the following types of components:
+\begin{itemize}
+  \item Server-side components
+  \item Client-side components
+\end{itemize}
+\subsection{GraphQL Application Components - Server Side}
+Any GraphQL server will contain the following components.
 
+\begin{enumerate}
+  \item { \textbf{Schema}: GraphQL schema is the heart of any GraphQL server. The schema is a description file that contains the types that are available with the system and the various set of operations that can be performed on those types. In other words, GraphQL helps to expose the various “data resources” that are available to the clients connected to the GraphQL server.}
+  \item { \textbf{Query}: GraphQL query is nothing but the request being initiated by the GraphQL client to the GraphQL server. The response to the request can be from various data sources like databases or other legacy REST APIs. An important point to be noted here is, GraphQL query is \textbf{declarative} (easy for us to predict the content that will be received by the client on seeing the query itself) by nature and helps to query the GraphQL server in a precise manner.}
+  \item { \textbf{Resolver}: Resolvers are nothing but the entities which provide instructions that are required to turn a GraphQL query/operation into data. They actually “resolve” the query and return data by defining various resolver functions that correspond to the schema.}
+\end{enumerate}
+These server-side components help the GraphQL server to parse the queries that are coming from the GraphQL client applications and to generate the relevant response. 
+We are aware that GraphQL is a specification and has got multiple implementations. We have a variety of languages supporting the creation of the GraphQL server. In this course, we shall see the Spring Boot way of creating a GraphQL server.
 
 \printglossaries
 \end{document}
