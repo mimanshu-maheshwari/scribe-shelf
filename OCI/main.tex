@@ -1,0 +1,55 @@
+\documentclass{report}
+\usepackage{csnotes}
+\usepackage{subfiles} % Best loaded last in the preamble
+
+\title{\textbf{OCI}}
+\author{Mimanshu Maheshwari}
+\date{\today}
+
+% Accronyms
+\newacronym{JSON}{JSON}{JavaScript Object Notation}
+\newacronym{OCI}{OCI}{Oracle Cloud Infrastructure}
+\newacronym{IaaS}{IaaS}{Infrastructure as a Service}
+\newacronym{PaaS}{PaaS}{Platform as a Service}
+\newacronym{SaaS}{SaaS}{Software as a Service}
+\newacronym{DaaS}{DaaS}{Data as a Service}
+\newacronym{BSON}{BSON}{Binary JavaScript Object Notation}
+\newacronym{CPU}{CPU}{Computer Processing Unit}
+\newacronym{REPL}{REPL}{read–eval–print loop}
+\newacronym{CRUD}{CRUD}{Create Read Update Delete}
+\newacronym{SDL}{SDL}{Schema Definition Language}
+\newacronym{AI}{AI}{Artificial Intelligence}
+\newacronym{ML}{ML}{Machine Learning}
+
+
+% figure:
+% \begin{figure}[bh]
+% 	\centering
+% 	\includegraphics[width=3cm]{aggregration.png}
+% 	\label{fig:Aggregration}
+% 	\caption{Overleaf logo}
+% \end{figure}
+
+% listing
+% \begin{lstlisting}[caption=app-child.component.html,language=HTML]
+% 	<div> 
+% 	<h2> Child Component content</h2>
+% 	<h3> Single Slot content projection</h3>
+% 	<ng-content></ng-content>
+% 	</div>
+% \end{lstlisting}
+
+\makeglossaries
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\listoffigures
+\lstlistoflistings
+
+
+\subfile{chapters/introduction}
+
+\printglossaries
+\end{document}
