@@ -1,15 +1,8 @@
-
 \documentclass[../main.tex]{subfiles}
 
-% \begin{lstlisting}[language=GraphQL, caption={Employee fetch id and name only using GraphQL query}, label={lst:fetch-employee-id-first-name}]
-% {
-%   employees {
-%     id
-%     firstName
-%   }
-% }
+% \begin{lstlisting}[language=Terraform, caption={}, label={lst:}]
 % \end{lstlisting}
-% Listing  \ref{lst:fetch-employee-id-first-name} is a basic example of usage.
+% Listing  \ref{lst:} is a basic example of usage.
 
 % follow this tutorial
 % https://developer.hashicorp.com/terraform/tutorials/oci-get-started/infrastructure-as-code
@@ -42,9 +35,9 @@ You can compose resources from different providers into reusable Terraform confi
 Terraform's configuration language is declarative, meaning that it describes the desired end-state for your infrastructure, in contrast to procedural programming languages that require step-by-step instructions to perform tasks.
 Terraform providers automatically calculate dependencies between resources to create or destroy them in the correct order.
 \begin{figure}[!ht]
-\centerline{\includegraphics[width=150mm]{assets.png}}
-\caption{Terraform process flow}
-\label{img:Terraform process flow}
+  \centerline{\includegraphics[width=150mm]{assets.png}}
+  \caption{Terraform process flow}
+  \label{img:Terraform process flow}
 \end{figure}
 
 To deploy infrastructure with Terraform(\ref{img:Terraform process flow}):
@@ -58,6 +51,138 @@ To deploy infrastructure with Terraform(\ref{img:Terraform process flow}):
 \section{Track your infrastructure}
 Terraform keeps track of your real infrastructure in a state file, which acts as a source of truth for your environment.
 Terraform uses the state file to determine the changes to make to your infrastructure so that it will match your configuration.
+
+\begin{lstlisting}[caption=terraform.tf,language=Terraform]
+  terraform {
+    required_providers {
+      docker = {
+        source  = "kreuzwerker/docker"
+        version = "~> 3.0.2"
+      }
+    }
+    required_version = "~> 1.7"
+  }
+\end{lstlisting}
+
+This file includes the terraform block, which defines the provider and Terraform versions you will use with this project.
+
+\begin{lstlisting}[caption=main.tf,language=Terraform]
+  provider "docker" {}
+
+  resource "docker_image" "nginx" {
+    name         = "nginx:latest"
+    keep_locally = false
+  }
+
+  resource "docker_container" "nginx" {
+    image = docker_image.nginx.image_id
+    name  = "tutorial"
+    ports {
+      internal = 80
+      external = 8000
+    }
+  }
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+  terraform init
+\end{lstlisting}
+
+Provision the NGINX server container with apply. When Terraform asks you to confirm, type yes and press ENTER.
+
+\begin{lstlisting}[language=bash]
+  terraform apply
+\end{lstlisting}
+
+Run \lstinline{docker ps} to view the NGINX container running in Docker via Terraform.
+
+\begin{lstlisting}[language=bash]
+  docker ps
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+  terraform destroy
+\end{lstlisting}
+To stop the container and destroy the resources created in this tutorial, run \lstinline{terraform destroy}. When Terraform asks you to confirm, type yes and press ENTER.
+
+\section{CLI Usage} 
+
+Create a directory named \lstinline{learn-terraform-docker-container}.
+\begin{lstlisting}[language=bash]
+  mkdir learn-terraform-docker-container
+\end{lstlisting}
+
+This working directory houses the configuration files that you write to describe the infrastructure you want Terraform to create and manage.
+When you initialize and apply the configuration here, Terraform uses this directory to store required plugins, modules (pre-written configurations), and information about the real infrastructure it created.
+Navigate into the working directory.
+
+\begin{lstlisting}[language=bash]
+  cd learn-terraform-docker-container
+\end{lstlisting}
+In the working directory, create a file called main.tf and paste the following Terraform configuration into it.
+\begin{lstlisting}[language=Terraform, caption={main.tf}]
+
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.1"
+    }
+  }
+}
+
+provider "docker" {
+  # remove host for mac or linux
+  host    = "npipe:////.//pipe//docker_engine"
+}
+
+resource "docker_image" "nginx" {
+  name         = "nginx"
+  keep_locally = false
+}
+
+resource "docker_container" "nginx" {
+  image = docker_image.nginx.image_id
+  name  = "tutorial"
+
+  ports {
+    internal = 80
+    external = 8000
+  }
+}
+\end{lstlisting}
+Initialize the project, which downloads a plugin called a provider that lets Terraform interact with Docker.
+
+\begin{lstlisting}[language=bash]
+  terraform init
+\end{lstlisting}
+Provision the NGINX server container with apply. When Terraform asks you to confirm type yes and press ENTER.
+\begin{lstlisting}[language=bash]
+  terraform apply
+\end{lstlisting}
+Verify the existence of the NGINX container by visiting \href{localhost:8000}{localhost:8000} in your web browser or running \lstinline{docker ps} to see the container.
+To stop the container, run terraform destroy.
+\begin{lstlisting}[language=bash]
+  terraform destroy
+\end{lstlisting}
+You've now provisioned and destroyed an NGINX webserver with Terraform.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \printglossaries
 \end{document}
