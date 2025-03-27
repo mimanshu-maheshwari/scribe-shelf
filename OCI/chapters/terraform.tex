@@ -119,37 +119,37 @@ Navigate into the working directory.
 \begin{lstlisting}[language=bash]
   cd learn-terraform-docker-container
 \end{lstlisting}
-In the working directory, create a file called main.tf and paste the following Terraform configuration into it.
+In the working directory, create a file called \href{run:../resources/learn-terraform-docker-container/main.tf}{main.tf} and paste the following Terraform configuration into it.
 \begin{lstlisting}[language=Terraform, caption={main.tf}]
 
-terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0.1"
+  terraform {
+    required_providers {
+      docker = {
+        source  = "kreuzwerker/docker"
+        version = "~> 3.0.1"
+      }
     }
   }
-}
 
-provider "docker" {
-  # remove host for mac or linux
-  host    = "npipe:////.//pipe//docker_engine"
-}
-
-resource "docker_image" "nginx" {
-  name         = "nginx"
-  keep_locally = false
-}
-
-resource "docker_container" "nginx" {
-  image = docker_image.nginx.image_id
-  name  = "tutorial"
-
-  ports {
-    internal = 80
-    external = 8000
+  provider "docker" {
+    # remove host for mac or linux
+    host    = "npipe:////.//pipe//docker_engine"
   }
-}
+
+  resource "docker_image" "nginx" {
+    name         = "nginx"
+    keep_locally = false
+  }
+
+  resource "docker_container" "nginx" {
+    image = docker_image.nginx.image_id
+    name  = "tutorial"
+
+    ports {
+      internal = 80
+      external = 8000
+    }
+  }
 \end{lstlisting}
 Initialize the project, which downloads a plugin called a provider that lets Terraform interact with Docker.
 
@@ -160,29 +160,176 @@ Provision the NGINX server container with apply. When Terraform asks you to conf
 \begin{lstlisting}[language=bash]
   terraform apply
 \end{lstlisting}
-Verify the existence of the NGINX container by visiting \href{localhost:8000}{localhost:8000} in your web browser or running \lstinline{docker ps} to see the container.
+Verify the existence of the NGINX container by visiting \url{localhost:8000} in your web browser or running \lstinline{docker ps} to see the container.
 To stop the container, run terraform destroy.
 \begin{lstlisting}[language=bash]
   terraform destroy
 \end{lstlisting}
 You've now provisioned and destroyed an NGINX webserver with Terraform.
 
+\section{Build infrastructure}
+Deploy a \gls{VCN} on \gls{OCI} using Terraform. Other \gls{OCI} resources need to deploy into a VCN.
+\subsection{Prerequisites}
+\begin{enumerate}
+  \item{\href{https://docs.oracle.com/en/cloud/foundation/cloud_architecture/governance/tenancy.html}{\gls{OCI} Tenancy}}
+  \item{The Terraform \gls{CLI} installed.}
+  \item{The \gls{OCI} \gls{CLI} installed.}
+\end{enumerate}
 
 
+\begin{lstlisting}[language=bash, caption={Configure the OCI CLI from your terminal}, label={lst:configure-the-oci-cli-from-your-terminal}]
+  oci session authenticate
+  # Enter a region by index or name(e.g.
+  # 1: ap-chiyoda-1, 2: ap-chuncheon-1, 3: ap-hyderabad-1, 4: ap-melbourne-1, 5: ap-mumbai-1,
+  # 6: ap-osaka-1, 7: ap-seoul-1, 8: ap-sydney-1, 9: ap-tokyo-1, 10: ca-montreal-1,
+  # 11: ca-toronto-1, 12: eu-amsterdam-1, 13: eu-frankfurt-1, 14: eu-zurich-1, 15: me-dubai-1,
+  # 16: me-jeddah-1, 17: sa-santiago-1, 18: sa-saopaulo-1, 19: uk-cardiff-1, 20: uk-gov-cardiff-1,
+  # 21: uk-gov-london-1, 22: uk-london-1, 23: us-ashburn-1, 24: us-gov-ashburn-1, 25: us-gov-chicago-1,
+  # 26: us-gov-phoenix-1, 27: us-langley-1, 28: us-luke-1, 29: us-phoenix-1, 30: us-sanjose-1):
+\end{lstlisting}
+
+Follow the prompts to enter the region where you have \gls{OCI} tenancy. A browser window automatically opens and prompts you for your \gls{OCI} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message, which means that you have configured the \gls{OCI} \gls{CLI} with a default profile.
+
+\begin{lstlisting}[language=bash]
+  oci session authenticate
+  # Enter a region by index or name(e.g.
+  # 1: ap-chiyoda-1, 2: ap-chuncheon-1, 3: ap-hyderabad-1, 4: ap-melbourne-1, 5: ap-mumbai-1,
+  # 6: ap-osaka-1, 7: ap-seoul-1, 8: ap-sydney-1, 9: ap-tokyo-1, 10: ca-montreal-1,
+  # 11: ca-toronto-1, 12: eu-amsterdam-1, 13: eu-frankfurt-1, 14: eu-zurich-1, 15: me-dubai-1,
+  # 16: me-jeddah-1, 17: sa-santiago-1, 18: sa-saopaulo-1, 19: uk-cardiff-1, 20: uk-gov-cardiff-1,
+  # 21: uk-gov-london-1, 22: uk-london-1, 23: us-ashburn-1, 24: us-gov-ashburn-1, 25: us-gov-chicago-1,
+  # 26: us-gov-phoenix-1, 27: us-langley-1, 28: us-luke-1, 29: us-phoenix-1, 30: us-sanjose-1):
+\end{lstlisting}
+
+Follow the prompts to enter the region where you have \gls{OCI} tenancy. A browser window automatically opens and prompts you for your \gls{OCI} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message and prompts you for a profile name.
+Enter learn-terraform for your profile name.
+
+The output prints the location where the CLI has stored your token. Terraform will automatically detect the token later in the tutorial, and use the credentials there to create infrastructure. The token has a 1-hour Time To Live (TTL). If it expires, refresh it by providing the profile name.
+\begin{lstlisting}[language=bash]
+  oci session refresh --profile learn-terraform
+  # Attempting to refresh token from https://auth.us-sanjose-1.oraclecloud.com/v1/authentication/refresh
+  # Successfully refreshed token
+\end{lstlisting}
+
+\subsection{Write configuration}
+\begin{itemize}
+  \item The set of files used to describe infrastructure in Terraform is known as a Terraform configuration.
+  \item You will write your first configuration to define a single \gls{OCI} \gls{VCN}.
+  \item Each Terraform configuration must be in its own working directory.
+  \item Create a directory for your configuration.
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+  mkdir learn-terraform-oci
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+  cd learn-terraform-oci
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+  touch main.tf
+\end{lstlisting}
+
+Open main.tf in your text editor and paste in the configuration below.
+\begin{lstlisting}[language=Terraform]
+  terraform {
+    required_providers {
+      oci = {
+        source = "oracle/oci"
+      }
+    }
+  }
+
+  provider "oci" {
+    region              = "us-sanjose-1"
+    auth                = "SecurityToken"
+    config_file_profile = "learn-terraform"
+  }
+
+  resource "oci_core_vcn" "internal" {
+    dns_label      = "internal"
+    cidr_block     = "172.16.0.0/20"
+    compartment_id = "<your_compartment_OCID_here>"
+    display_name   = "My internal VCN"
+  }
+\end{lstlisting}
+
+Customize the following values:
+\begin{itemize}
+  \item {\textbf{region} - value should match your \gls{OCI} region.}
+  \item{\textbf{compartment\_id} - value should match your "\gls{OCID}" which you can get by clicking on the profile icon in the far top right of the \gls{OCI} console and selecting "Tenancy: YourUsername" from the dropdown menu.}
+\end{itemize}
+Save the customized file.
+This is a complete configuration that you can deploy with Terraform. In the following sections, we will review each block of this configuration in more detail.
+
+\section{Terraform block}
+The "terraform \{\}" block contains Terraform settings, the required providers Terraform will use to provision your infrastructure.
+For each provider, the "source" attribute defines an optional "hostname", a "namespace", and the provider "type". Terraform installs providers from the \href{https://registry.terraform.io}{Terraform Registry} by default. 
+In this example configuration, the oci provider's source is defined as oracle/oci, which is shorthand for \textbf{registry.terraform.io/oracle/oci}.
+
+You can also set a version constraint for each provider defined in the \lstinline{required_providers} block.
+The \lstinline{version} attribute is optional, but we recommend using it to constrain the provider version so that Terraform does not install a version of the provider that does not work with your configuration. 
+If you do not specify a provider version, Terraform will automatically download the most recent version during initialization.
+
+More information at \href{https://developer.hashicorp.com/terraform/language/providers/requirements}{provider source documentation}
 
 
+\section{Providers}
+The provider block configures the specified provider, in our case oci. A provider is a plugin that Terraform uses to create and mange your resources.
+
+The \lstinline{config\_file\_profile} attribute in the \gls{OCI} provider block refers Terraform to the token credentials stored in the file that the \gls{OCI} \gls{CLI} created when you configured it. Never hard-code credentials or other secrets in your configuration files. Like other types of code, you may share and manage your Terraform configuration files using source control, so hard-coding secret values can expose them to attackers.
+
+You can use multiple provider blocks in your Terraform configuration to manage resources from different providers. You can even use different providers together. For example, you could pass the \gls{IP} address of an \gls{OCI} instance to a monitoring resource from DataDog.
+
+\section{Resources}
+Use resource blocks to define components of your infrastructure. A resource might be a physical or virtual component such as a \gls{VCN}, or it can be a logical resource such as a Heroku application.
 
 
+Resource blocks have two strings before the block: the \textbf{resource type} and the \textbf{resource name}.
+In this example, the resource type is "oci\_core\_vcn" and the name is "internal".
+The prefix of the type maps to the name of the provider, in this case, oci. 
+Together, the resource type and name form Terraform's unique ID for the resource. For example, the ID of your \gls{VCN} is "oci\_core\_vcn.internal"
 
+Resource blocks contain arguments which you use to configure the resource. The example configuration contains arguments that set the \gls{DNS} label, the \gls{CIDR} block for the \gls{VCN}, your \gls{OCID}, and the display name.
+The \href{https://registry.terraform.io/providers/oracle/oci/latest}{OCI provider documentation} documents the requried and optional arguments for each resource in the \gls{OCI} provider.
 
+\section{Initialize the directory}
+\begin{lstlisting}[language=bash]
+terraform init
 
+# Initializing the backend...
 
-
-
-
-
-
-
+# Initializing provider plugins...
+# - Finding latest version of oracle/oci...
+# - Installing oracle/oci v5.7.0...
+# - Installed oracle/oci v5.7.0 (signed by a HashiCorp partner, key ID 1533A49284137CEB)
+ 
+# Terraform has created a lock file .terraform.lock.hcl to record the provider
+# selections it made above. Include this file in your version control repository
+# so that Terraform can guarantee to make the same selections by default when
+# you run "terraform init" in the future.
+ 
+# Terraform has been successfully initialized!
+ 
+# You may now begin working with Terraform. Try running "terraform plan" to see
+# any changes that are required for your infrastructure. All Terraform commands
+# should now work.
+ 
+# If you ever set or change modules or backend configuration for Terraform,
+# rerun this command to reinitialize your working directory. If you forget, other
+# commands will detect it and remind you to do so if necessary.
+\end{lstlisting}
+Terraform downloads the oci provider and installs it in a hidden subdirectory of your current working directory, named .terraform. The terraform init command prints out which version of the provider was installed. Terraform also creates a lock file named .terraform.lock.hcl which specifies the exact provider versions used, so that you can control when you want to update the providers used for your project.
 
 \printglossaries
+
 \end{document}
+
+
+
+% \begin{lstlisting}[language=Terraform, caption={}, label={lst:}]
+% \end{lstlisting}
+%
+% \begin{lstlisting}[language=bash]
+% \end{lstlisting}
