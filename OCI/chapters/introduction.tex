@@ -15,18 +15,142 @@
 \chapter{Introduction}
 % 01. What is OCI?
 \section{What is OCI?}
-\gls{OCI} is a cloud computing service offered by Oracle that provides \gls{IaaS}, \gls{PaaS}, \gls{SaaS}, and \gls{DaaS} solutions.
+\acrfull{oci} is a cloud computing service offered by Oracle that provides \acrfull{iaas}, \acrfull{paas}, \acrfull{saas}, and \acrfull{daas} solutions.
 It is designed to support high-performance computing, enterprise workloads, and cloud-native applications.
-OCI provides services such as compute, storage, networking, databases, security, and \gls{AI}/\gls{ML} tools.
-% 02. What is region in OCI?
-% 03. What is realm in OCI?
-% 04. What is physical domain and fault domain in OCI?
-% 05. What is tenancy in OCI?
-% 06. What is compartment in OCI?
-% 07. What is group and dynamic group in OCI?
-% 08. How is auth done in OCI?
-% 09. Understanding IAM in OCI?
-% 10. Using Java sdk to interact with OCI?
+\acrshort{oci} provides services such as compute, storage, networking, databases, security, and \acrshort{ai}/\acrshort{ml} tools.
 
-\printglossaries
+% 02. What is region in OCI?
+\section{What is realm in OCI?}
+A region in \acrshort{oci} is a geographically distinct area where \acrshort{oci} resources are deployed.
+Each region consists of multiple Availability Domains (ADs), ensuring high availability and disaster recovery.
+Examples of \acrshort{oci} regions include "us-ashburn-1" (US East), "uk-london-1" (UK), "ap-mumbai-1" (India), etc.
+% 03. What is realm in OCI?
+\section{What is realm in OCI?}
+A realm in OCI is a collection of OCI regions that share the same identity namespace and authentication policies.
+Each OCI realm is isolated from others.
+\begin{itemize}
+  \item {Example: The commercial realm contains most OCI public regions, while the government realm includes regions meant for government customers.}
+  \item {Common realms include:
+      \begin{itemize}
+        \item oc1 $\rightarrow$ Commercial cloud
+        \item oc2 $\rightarrow$ Government cloud
+        \item oc3 $\rightarrow$ Dedicated Oracle Cloud
+      \end{itemize}
+    }
+\end{itemize}
+
+% 04. What is physical domain and fault domain in OCI?
+\section{What is a physical domain and fault domain in OCI?}
+\begin{itemize}
+  \item {\acrfull{ad}: A physically independent data center within an OCI region. 
+    It has its own power, cooling, and network. Some OCI regions have multiple ADs.}
+  \item {\acrfull{fd}: A logical grouping of resources within an AD to protect against hardware failures.
+    If a fault domain fails, only resources in that domain are affected.}
+\end{itemize}
+Example: If a region has 3 \acrlong{ad}, each AD has multiple \acrlong{fd} to distribute workloads and avoid single points of failure.
+
+% 05. What is tenancy in OCI?
+\section{What is tenancy in OCI?}
+A tenancy in OCI is a root-level account that represents an organization’s cloud environment.
+It contains compartments, users, groups, and policies that control access to resources.
+Example: If a company has multiple departments, each department can have its own compartment within a single tenancy.
+
+% 06. What is compartment in OCI?
+\section{What is compartment in OCI?}
+A compartment is a logical container for OCI resources such as compute instances, storage, and databases.
+It allows for fine-grained access control using OCI \acrfull{iam} policies.
+Example: A company might create separate compartments for Development, Testing, and Production environments.
+
+% 07. What is group and dynamic group in OCI?
+\section{What is a group and dynamic group in OCI?}
+\begin{itemize}
+  \item Group: A collection of IAM users that share the same access policies.
+  \item Dynamic Group: A special type of group that includes compute instances and other cloud resources instead of users.
+\end{itemize}
+Example: If you want all compute instances in a compartment to access Object Storage, you create a dynamic group and grant permissions via IAM policies.
+
+% 08. How is auth done in OCI?
+\section{How is authentication done in OCI?}
+OCI supports multiple authentication methods:
+\begin{itemize}
+  \item{Username \& Password: Standard login via OCI Console}
+  \item{\acrfull{api} Key Authentication: Uses public-private key pairs for programmatic access}
+
+  \item{Instance Principal Authentication: Allows compute instances to access resources without credentials}
+
+  \item{Identity Federation: Integrates with Okta, \acrfull{maad}, and other \acrfull{IdP}s for \acrfull{sso}}
+
+  \item{Resource Principal Authentication: Allows OCI services to authenticate with other OCI services}
+\end{itemize}
+% 09. Understanding IAM in OCI?
+\section{Understanding IAM in OCI?}
+\acrshort{oci} \acrfull{iam} controls who can access what within OCI. Key \acrshort{iam} concepts include:
+\begin{itemize}
+  \item Users $\rightarrow$ Individual accounts
+  \item Groups $\rightarrow$ Collections of users with shared permissions
+  \item Policies $\rightarrow$ Define permissions using a human-readable language
+  \item Compartments $\rightarrow$ Logical containers for resources
+  \item Dynamic Groups $\rightarrow$ Allow compute instances to have permissions
+\end{itemize}
+
+% 10. Using Java sdk to interact with OCI?
+\section{Using Java SDK to interact with OCI?}
+OCI provides a Java \acrshort{sdk} to programmatically interact with its services. To use it:
+
+\begin{enumerate}
+  \item {
+      Step 1: Add OCI SDK Dependency Maven
+      \begin{lstlisting}[language=xml]
+        <dependency>
+        <groupId>com.oracle.oci.sdk</groupId>
+        <artifactId>oci-java-sdk-common</artifactId>
+        <version>3.0.0</version>
+        </dependency>
+      \end{lstlisting}
+    }
+  \item {
+      Step 2: Configure Authentication
+      Use an \acrshort{api} key or Instance Principals for authentication.
+    }
+  \item {
+      Step 3: Initialize the SDK \& Make a Request
+      \begin{lstlisting}[language=Java, caption={lists all OCI regions using SDK}]
+        import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+        import com.oracle.bmc.identity.IdentityClient;
+        import com.oracle.bmc.identity.requests.ListRegionsRequest;
+        import com.oracle.bmc.identity.responses.ListRegionsResponse;
+
+        public class OCIExample {
+          public static void main(String[] args) throws Exception {
+            ConfigFileAuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider("~/.oci/config");
+            IdentityClient identityClient = new IdentityClient(provider);
+            ListRegionsResponse response = identityClient.listRegions(ListRegionsRequest.builder().build());
+            response.getItems().forEach(region -> System.out.println(region.getName()));
+            identityClient.close();
+          }
+        }
+      \end{lstlisting}
+      \begin{lstlisting}[language=Java, caption={lists all compute instances in a specified compartment}]
+        import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+        import com.oracle.bmc.core.ComputeClient;
+        import com.oracle.bmc.core.requests.ListInstancesRequest;
+        import com.oracle.bmc.core.responses.ListInstancesResponse;
+
+        public class OCITest {
+          public static void main(String[] args) throws Exception {
+            ConfigFileAuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider("~/.oci/config", "DEFAULT");
+            ComputeClient computeClient = new ComputeClient(provider);
+            ListInstancesRequest request = ListInstancesRequest.builder()
+            .compartmentId("ocid1.compartment.oc1..example")
+            .build();
+            ListInstancesResponse response = computeClient.listInstances(request);
+            response.getItems().forEach(instance -> System.out.println(instance.getDisplayName()));
+            computeClient.close();
+          }
+        }
+      \end{lstlisting}
+    }
+\end{enumerate}
+
+% \printglossaries
 \end{document}

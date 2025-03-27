@@ -11,7 +11,7 @@
 \begin{document}
 \chapter{Terraform}
 \section{What is IaC?}
-\gls{IaC} tools allow you to manage infrastructure with configuration files rather than through a graphical user interface.
+\acrfull{iac} tools allow you to manage infrastructure with configuration files rather than through a graphical user interface.
 IaC allows you to build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
 Terraform is HashiCorp's infrastructure as code tool.
 It lets you define resources and infrastructure in human-readable, declarative configuration files, and manages your infrastructure's lifecycle.
@@ -37,10 +37,11 @@ Terraform providers automatically calculate dependencies between resources to cr
 \begin{figure}[!ht]
   \centerline{\includegraphics[width=150mm]{assets.png}}
   \caption{Terraform process flow}
-  \label{img:Terraform process flow}
+  \label{img:terraform-process-flow}
 \end{figure}
 
-To deploy infrastructure with Terraform(\ref{img:Terraform process flow}):
+To deploy infrastructure with Terraform(\ref{img:terraform-process-flow}):
+
 \begin{itemize}
   \item {\textbf{Scope}: Identify the infrastructure for your project.}
   \item {\textbf{Author}: Write the configuration for your infrastructure.}
@@ -168,12 +169,12 @@ To stop the container, run terraform destroy.
 You've now provisioned and destroyed an NGINX webserver with Terraform.
 
 \section{Build infrastructure}
-Deploy a \gls{VCN} on \gls{OCI} using Terraform. Other \gls{OCI} resources need to deploy into a VCN.
+Deploy a \acrfull{vcn} on \acrfull{oci} using Terraform. Other \acrshort{oci} resources need to deploy into a VCN.
 \subsection{Prerequisites}
 \begin{enumerate}
-  \item{\href{https://docs.oracle.com/en/cloud/foundation/cloud_architecture/governance/tenancy.html}{\gls{OCI} Tenancy}}
-  \item{The Terraform \gls{CLI} installed.}
-  \item{The \gls{OCI} \gls{CLI} installed.}
+  \item{\href{https://docs.oracle.com/en/cloud/foundation/cloud_architecture/governance/tenancy.html}{\acrshort{oci} Tenancy}}
+  \item{The Terraform \acrfull{cli} installed.}
+  \item{The \acrshort{oci} \acrshort{cli} installed.}
 \end{enumerate}
 
 
@@ -188,7 +189,7 @@ Deploy a \gls{VCN} on \gls{OCI} using Terraform. Other \gls{OCI} resources need 
   # 26: us-gov-phoenix-1, 27: us-langley-1, 28: us-luke-1, 29: us-phoenix-1, 30: us-sanjose-1):
 \end{lstlisting}
 
-Follow the prompts to enter the region where you have \gls{OCI} tenancy. A browser window automatically opens and prompts you for your \gls{OCI} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message, which means that you have configured the \gls{OCI} \gls{CLI} with a default profile.
+Follow the prompts to enter the region where you have \acrshort{oci} tenancy. A browser window automatically opens and prompts you for your \acrshort{oci} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message, which means that you have configured the \acrshort{oci} \acrshort{cli} with a default profile.
 
 \begin{lstlisting}[language=bash]
   oci session authenticate
@@ -201,7 +202,7 @@ Follow the prompts to enter the region where you have \gls{OCI} tenancy. A brows
   # 26: us-gov-phoenix-1, 27: us-langley-1, 28: us-luke-1, 29: us-phoenix-1, 30: us-sanjose-1):
 \end{lstlisting}
 
-Follow the prompts to enter the region where you have \gls{OCI} tenancy. A browser window automatically opens and prompts you for your \gls{OCI} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message and prompts you for a profile name.
+Follow the prompts to enter the region where you have \acrshort{oci} tenancy. A browser window automatically opens and prompts you for your \acrshort{oci} user name and password. Enter them and click the "Sign In" button. Then return to your terminal. It displays a success message and prompts you for a profile name.
 Enter learn-terraform for your profile name.
 
 The output prints the location where the CLI has stored your token. Terraform will automatically detect the token later in the tutorial, and use the credentials there to create infrastructure. The token has a 1-hour Time To Live (TTL). If it expires, refresh it by providing the profile name.
@@ -214,7 +215,7 @@ The output prints the location where the CLI has stored your token. Terraform wi
 \subsection{Write configuration}
 \begin{itemize}
   \item The set of files used to describe infrastructure in Terraform is known as a Terraform configuration.
-  \item You will write your first configuration to define a single \gls{OCI} \gls{VCN}.
+  \item You will write your first configuration to define a single \acrshort{oci} \acrshort{vcn}.
   \item Each Terraform configuration must be in its own working directory.
   \item Create a directory for your configuration.
 \end{itemize}
@@ -257,8 +258,8 @@ Open main.tf in your text editor and paste in the configuration below.
 
 Customize the following values:
 \begin{itemize}
-  \item {\textbf{region} - value should match your \gls{OCI} region.}
-  \item{\textbf{compartment\_id} - value should match your "\gls{OCID}" which you can get by clicking on the profile icon in the far top right of the \gls{OCI} console and selecting "Tenancy: YourUsername" from the dropdown menu.}
+  \item {\textbf{region} - value should match your \acrshort{oci} region.}
+  \item{\textbf{compartment\_id} - value should match your "\acrfull{ocid}" which you can get by clicking on the profile icon in the far top right of the \acrshort{oci} console and selecting "Tenancy: YourUsername" from the dropdown menu.}
 \end{itemize}
 Save the customized file.
 This is a complete configuration that you can deploy with Terraform. In the following sections, we will review each block of this configuration in more detail.
@@ -278,21 +279,21 @@ More information at \href{https://developer.hashicorp.com/terraform/language/pro
 \section{Providers}
 The provider block configures the specified provider, in our case oci. A provider is a plugin that Terraform uses to create and mange your resources.
 
-The \lstinline{config\_file\_profile} attribute in the \gls{OCI} provider block refers Terraform to the token credentials stored in the file that the \gls{OCI} \gls{CLI} created when you configured it. Never hard-code credentials or other secrets in your configuration files. Like other types of code, you may share and manage your Terraform configuration files using source control, so hard-coding secret values can expose them to attackers.
+The \lstinline{config\_file\_profile} attribute in the \acrshort{oci} provider block refers Terraform to the token credentials stored in the file that the \acrshort{oci} \acrshort{cli} created when you configured it. Never hard-code credentials or other secrets in your configuration files. Like other types of code, you may share and manage your Terraform configuration files using source control, so hard-coding secret values can expose them to attackers.
 
-You can use multiple provider blocks in your Terraform configuration to manage resources from different providers. You can even use different providers together. For example, you could pass the \gls{IP} address of an \gls{OCI} instance to a monitoring resource from DataDog.
+You can use multiple provider blocks in your Terraform configuration to manage resources from different providers. You can even use different providers together. For example, you could pass the \acrfull{ip} address of an \acrshort{oci} instance to a monitoring resource from DataDog.
 
 \section{Resources}
-Use resource blocks to define components of your infrastructure. A resource might be a physical or virtual component such as a \gls{VCN}, or it can be a logical resource such as a Heroku application.
+Use resource blocks to define components of your infrastructure. A resource might be a physical or virtual component such as a \acrshort{vcn}, or it can be a logical resource such as a Heroku application.
 
 
 Resource blocks have two strings before the block: the \textbf{resource type} and the \textbf{resource name}.
 In this example, the resource type is "oci\_core\_vcn" and the name is "internal".
 The prefix of the type maps to the name of the provider, in this case, oci. 
-Together, the resource type and name form Terraform's unique ID for the resource. For example, the ID of your \gls{VCN} is "oci\_core\_vcn.internal"
+Together, the resource type and name form Terraform's unique ID for the resource. For example, the ID of your \acrshort{vcn} is "oci\_core\_vcn.internal"
 
-Resource blocks contain arguments which you use to configure the resource. The example configuration contains arguments that set the \gls{DNS} label, the \gls{CIDR} block for the \gls{VCN}, your \gls{OCID}, and the display name.
-The \href{https://registry.terraform.io/providers/oracle/oci/latest}{OCI provider documentation} documents the requried and optional arguments for each resource in the \gls{OCI} provider.
+Resource blocks contain arguments which you use to configure the resource. The example configuration contains arguments that set the \acrfull{dns} label, the \acrfull{cidr} block for the \acrshort{vcn}, your \acrshort{ocid}, and the display name.
+The \href{https://registry.terraform.io/providers/oracle/oci/latest}{OCI provider documentation} documents the requried and optional arguments for each resource in the \acrshort{oci} provider.
 
 \section{Initialize the directory}
 \begin{lstlisting}[language=bash]
@@ -383,12 +384,12 @@ Before it applies any changes, Terraform prints out the execution plan which des
 The output format is similar to the diff format generated by tools such as Git.
 The output has a + next to "oci\_core\_vcn.internal", meaning that Terraform will create this resource. Beneath that, it shows the attributes that will be set.
 When the value displayd is \(known after apply\), it means that the value won't be known until the resource is created.
-For instance, \gls{OCI} assigns its own ID when it creats the \gls{VCN}, so Terraform can't know the value of the ID attribute until you apply the change and the \gls{OCI} provider returns that vlaue from the \gls{OCI} \gls{API},
+For instance, \acrshort{oci} assigns its own ID when it creats the \acrshort{vcn}, so Terraform can't know the value of the ID attribute until you apply the change and the \acrshort{oci} provider returns that vlaue from the \acrshort{oci} \acrfull{api},
 
 Terraform will n2wo pause and wait for you approval before proceeding. If anything int the plan seems incorrect or dangerous, it is safe to abort here with no changes made to you infrastructure.
 
-In this case the plan is acceptable, so type yes at the confirmation prompt to proceed. Executing the plan will take a few minutes since Terraform waits for the \gls{VCN} to become available.
-You've now created infrastructure using Terraform! Visit the \href{https://cloud.oracle.com/networking/vcns}{OCI console \gls{VCN} page}, select your compartment, and find your new \gls{VCN}, listed as "My internal VCN".
+In this case the plan is acceptable, so type yes at the confirmation prompt to proceed. Executing the plan will take a few minutes since Terraform waits for the \acrshort{vcn} to become available.
+You've now created infrastructure using Terraform! Visit the \href{https://cloud.oracle.com/networking/vcns}{OCI console \acrshort{vcn} page}, select your compartment, and find your new \acrshort{vcn}, listed as "My internal VCN".
 
 \section{Inspect State}
 When you applied your configuration, Terraform wrote data into a file called terraform.tfstate. Terraform stores the IDs and properties of the resources it manages in this file, so that it can update or destroy those resources going forward.
@@ -425,7 +426,7 @@ Inspect state using \lstinline{terraform show}
     #     vcn_domain_name          = "internal.oraclevcn.com"
   # }
 \end{lstlisting}
-When Terraform created this \gls{VCN}, it also gathered a lot of information about it from the \gls{OCI} provider. These values can be referenced to configure other resources or outputs.
+When Terraform created this \acrfull{vcn}, it also gathered a lot of information about it from the \acrshort{oci} provider. These values can be referenced to configure other resources or outputs.
 
 \section{Manually managing state}
 Terraform has a built-in command called terraform state for advanced state management. For example, you may want a list of the resources in your project's state, which you can get by using the list subcommand.
@@ -435,15 +436,11 @@ Terraform has a built-in command called terraform state for advanced state manag
   # oci_core_vcn.internal
 \end{lstlisting}
 
-
-\printglossaries
-
 \end{document}
-
-
 
 % \begin{lstlisting}[language=Terraform, caption={}, label={lst:}]
 % \end{lstlisting}
-%
-% \begin{lstlisting}[language=bash]
+
+% \begin{lstlisting}[language=bash, caption={}, label={lst:}]
 % \end{lstlisting}
+

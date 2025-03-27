@@ -9,28 +9,37 @@
 \author{Mimanshu Maheshwari}
 \date{\today}
 
+
+\makeglossaries
 % Accronyms
-\newacronym{JSON}{JSON}{JavaScript Object Notation}
-\newacronym{OCI}{OCI}{Oracle Cloud Infrastructure}
-\newacronym{API}{API}{Application Platform Interface}
-\newacronym{CLI}{CLI}{Command Line Interface}
-\newacronym{IaaS}{IaaS}{Infrastructure as a Service}
-\newacronym{PaaS}{PaaS}{Platform as a Service}
-\newacronym{SaaS}{SaaS}{Software as a Service}
-\newacronym{DaaS}{DaaS}{Data as a Service}
-\newacronym{BSON}{BSON}{Binary JavaScript Object Notation}
-\newacronym{CPU}{CPU}{Computer Processing Unit}
-\newacronym{REPL}{REPL}{read–eval–print loop}
-\newacronym{CRUD}{CRUD}{Create Read Update Delete}
-\newacronym{SDL}{SDL}{Schema Definition Language}
-\newacronym{AI}{AI}{Artificial Intelligence}
-\newacronym{ML}{ML}{Machine Learning}
-\newacronym{IP}{IP}{Internet Protocol}
-\newacronym{VCN}{VCN}{Virtual Cloud Network}
-\newacronym{DNS}{DNS}{Domain Name Server}
-\newacronym{CIDR}{CIDR}{Classless Inter-Domain Routing}
-\newacronym{IaC}{IaC}{Infrastructure as Code}
-\newacronym{OCID}{OCID}{Oracle cloud ID}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{oci}{OCI}{Oracle Cloud Infrastructure}
+\newacronym{api}{API}{Application Platform Interface}
+\newacronym{cli}{CLI}{Command Line Interface}
+\newacronym{iaas}{IaaS}{Infrastructure as a Service}
+\newacronym{paas}{PaaS}{Platform as a Service}
+\newacronym{saas}{SaaS}{Software as a Service}
+\newacronym{daas}{DaaS}{Data as a Service}
+\newacronym{bson}{BSON}{Binary JavaScript Object Notation}
+\newacronym{cpu}{CPU}{Computer Processing Unit}
+\newacronym{repl}{REPL}{read–eval–print loop}
+\newacronym{crud}{CRUD}{Create Read Update Delete}
+\newacronym{sdl}{SDL}{Schema Definition Language}
+\newacronym{ai}{AI}{Artificial Intelligence}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{ad}{AD}{Availability Domain}
+\newacronym{fd}{FD}{Fault Domain}
+\newacronym{iam}{IAM}{Identity and Access Management}
+\newacronym{ip}{IP}{Internet Protocol}
+\newacronym{vcn}{VCN}{Virtual Cloud Network}
+\newacronym{IdP}{IdP}{Identity Provider}
+\newacronym{sso}{SSO}{Single Sign On}
+\newacronym{maad}{MAAD}{Microsoft Azure AD}
+\newacronym{dns}{DNS}{Domain Name Server}
+\newacronym{cidr}{CIDR}{Classless Inter-Domain Routing}
+\newacronym{iac}{IaC}{Infrastructure as Code}
+\newacronym{ocid}{OCID}{Oracle cloud ID}
+\newacronym{sdk}{SDK}{Software Development Kit}
 
 
 % figure:
@@ -49,9 +58,7 @@
 % 	<ng-content></ng-content>
 % 	</div>
 % \end{lstlisting}
-
-\makeglossaries
-
+%
 \begin{document}
 
 \maketitle
@@ -63,5 +70,9 @@
 \subfile{chapters/introduction}
 \subfile{chapters/terraform}
 
-\printglossaries
+
+\clearpage
+\printglossary[type=\acronymtype, title=Special Terms, toctitle=List of terms]
+% \printglossary
+% \printglossaries
 \end{document}
