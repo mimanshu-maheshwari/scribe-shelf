@@ -20,10 +20,11 @@ It is designed to support high-performance computing, enterprise workloads, and 
 \acrshort{oci} provides services such as compute, storage, networking, databases, security, and \acrshort{ai}/\acrshort{ml} tools.
 
 % 02. What is region in OCI?
-\section{What is realm in OCI?}
+\section{What is region in OCI?}
 A region in \acrshort{oci} is a geographically distinct area where \acrshort{oci} resources are deployed.
 Each region consists of multiple Availability Domains (ADs), ensuring high availability and disaster recovery.
 Examples of \acrshort{oci} regions include "us-ashburn-1" (US East), "uk-london-1" (UK), "ap-mumbai-1" (India), etc.
+
 % 03. What is realm in OCI?
 \section{What is realm in OCI?}
 A realm in OCI is a collection of OCI regions that share the same identity namespace and authentication policies.
@@ -43,7 +44,10 @@ Each OCI realm is isolated from others.
 \section{What is a physical domain and fault domain in OCI?}
 \begin{itemize}
   \item {\acrfull{ad}: A physically independent data center within an OCI region. 
-    It has its own power, cooling, and network. Some OCI regions have multiple ADs.}
+    It has its own power, cooling, and network. Some OCI regions have multiple ADs.
+    \acrshort{ad} are one or multiple data center that are localized in each region.
+    They have their own network, cooling, networking, etc.
+  }
   \item {\acrfull{fd}: A logical grouping of resources within an AD to protect against hardware failures.
     If a fault domain fails, only resources in that domain are affected.}
 \end{itemize}
@@ -75,13 +79,11 @@ OCI supports multiple authentication methods:
 \begin{itemize}
   \item{Username \& Password: Standard login via OCI Console}
   \item{\acrfull{api} Key Authentication: Uses public-private key pairs for programmatic access}
-
   \item{Instance Principal Authentication: Allows compute instances to access resources without credentials}
-
   \item{Identity Federation: Integrates with Okta, \acrfull{maad}, and other \acrfull{IdP}s for \acrfull{sso}}
-
   \item{Resource Principal Authentication: Allows OCI services to authenticate with other OCI services}
 \end{itemize}
+
 % 09. Understanding IAM in OCI?
 \section{Understanding IAM in OCI?}
 \acrshort{oci} \acrfull{iam} controls who can access what within OCI. Key \acrshort{iam} concepts include:
@@ -151,6 +153,14 @@ OCI provides a Java \acrshort{sdk} to programmatically interact with its service
       \end{lstlisting}
     }
 \end{enumerate}
+
+\section{What is CIDR?}
+\subsection{What Are Classes in CIDR}
+\section{Control Plane vs. Data Plane}
+\section{User Principal}
+\section{Instance Principal}
+\section{Resource Principal}
+\section{IP and Subnet in OCI}
 
 % \printglossaries
 \end{document}
