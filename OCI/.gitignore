@@ -1,15 +1,21 @@
-main.aux
-main.fdb_latexmk
-main.fls
-main.lof
-main.log
-main.lol
-main.out
-main.synctex.gz
-main.toc
-main.acn
-main.glo
-main.ist
+**.aux
+**.fdb_latexmk
+**.fls
+**.lof
+**.log
+**.lol
+**.out
+**.synctex.gz
+**.toc
+**.acn
+**.glo
+**.ist
+**.acr
+**.alg
+**.glg
+**.gls
+**.synctex(busy)
+
 
 
 resources/**/.terraform**

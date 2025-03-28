@@ -44,10 +44,10 @@ Each OCI realm is isolated from others.
 \section{What is a physical domain and fault domain in OCI?}
 \begin{itemize}
   \item {\acrfull{ad}: A physically independent data center within an OCI region. 
-    It has its own power, cooling, and network. Some OCI regions have multiple ADs.
-    \acrshort{ad} are one or multiple data center that are localized in each region.
-    They have their own network, cooling, networking, etc.
-  }
+      It has its own power, cooling, and network. Some OCI regions have multiple ADs.
+      \acrshort{ad} are one or multiple data center that are localized in each region.
+      They have their own network, cooling, networking, etc.
+    }
   \item {\acrfull{fd}: A logical grouping of resources within an AD to protect against hardware failures.
     If a fault domain fails, only resources in that domain are affected.}
 \end{itemize}
@@ -108,14 +108,14 @@ OCI provides a Java \acrshort{sdk} to programmatically interact with its service
         <artifactId>oci-java-sdk-common</artifactId>
         <version>3.0.0</version>
         </dependency>
-      \end{lstlisting}
-    }
-  \item {
-      Step 2: Configure Authentication
-      Use an \acrshort{api} key or Instance Principals for authentication.
-    }
-  \item {
-      Step 3: Initialize the SDK \& Make a Request
+    \end{lstlisting}
+  }
+\item {
+    Step 2: Configure Authentication
+    Use an \acrshort{api} key or Instance Principals for authentication.
+  }
+\item {
+    Step 3: Initialize the SDK \& Make a Request
       \begin{lstlisting}[language=Java, caption={lists all OCI regions using SDK}]
         import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
         import com.oracle.bmc.identity.IdentityClient;
@@ -151,13 +151,101 @@ OCI provides a Java \acrshort{sdk} to programmatically interact with its service
           }
         }
       \end{lstlisting}
-    }
+  }
 \end{enumerate}
 
 \section{What is CIDR?}
-\acrfull{cidr} is a method used to allocate \acrhsort{ip} addresses and route internet traffic efficiently. it replaces the traditional class based \acrshort{ip} addressing system (class A, B, C, D) with a more flexible, hierarchical, and scalable system.
-\subsection{What Are Classes in CIDR}
-% \section{Control Plane vs. Data Plane}
+\acrfull{cidr} is a method used to allocate \acrshort{ip} addresses and route internet traffic efficiently. 
+It replaces the traditional class based \acrshort{ip} addressing system (class A, B, C, D) with a more flexible, hierarchical, and scalable system.
+\subsection{CIDR Notation}
+CIDR notation represents an IP address range using a prefix and a subnet mask length, written as \lstinline{IP Address / Subnet Mask Length}
+\\
+Example:
+\\
+$192.168.1.0/24$
+\begin{itemize}
+  \item $192.168.1.0 \rightarrow$ Network address
+  \item $/24$ $\rightarrow$ The first 24 bits are the network portion, leaving 8 bits for host addresses.
+\end{itemize}
+This means:
+\begin{itemize}
+  \item The subnet can have 256 IPs (from $192.168.1.0$ to $192.168.1.255$).
+  \item Usable IPs: $254$ (since the first IP is the network address and the last is the broadcast address).
+\end{itemize}
+
+CIDR Subnet Mask Table
+\begin{center}
+  \begin{tabular}{ ||c|c|c|c|| }
+    \hline
+    CIDR & Subnet Mask & \# of Addresses & \# of usable IPs \\ [0.5ex]
+    \hline \hline
+    $/8$ & $255.0.0.0$ & $16,777,216$ & $16,777,214$ \\
+    \hline
+    $/16$ & $255.255.0.0$ & $65,536$ & $65,534$ \\
+    \hline
+    $/24$ & $255.255.255.0$ & $256$ & $254$ \\
+    \hline
+    $/30$ & $255.255.255.252$ & $4$ & $2$ \\
+    \hline
+  \end{tabular}
+\end{center}
+\subsection{CIDR Benefits}
+\begin{enumerate}
+  \item Efficient IP Address Allocation $\rightarrow$ Avoids wasteful allocation of large blocks.
+  \item Better Routing $\rightarrow$ Reduces the size of routing tables by aggregating multiple IPs (supernetting).
+  \item Flexible Subnetting $\rightarrow$ Allows customized network sizes without being restricted to Class A, B, or C.
+  \item Supports \acrfull{vlsm} $\rightarrow$ Enables different subnet sizes within the same network.
+\end{enumerate}
+
+\subsection{Example Use Case}
+\begin{enumerate}
+  \item Public Cloud Networking (\acrfull{aws}, \acrfull{oci}, Azure, \acrfull{gcp}) $\rightarrow$ \acrshort{cidr} blocks are used to define \acrfull{vpc} address ranges.
+  \item Corporate Networks $\rightarrow$ Organizations define \acrshort{cidr} blocks to segment their internal IP addressing.
+\end{enumerate}
+
+\section{Traditional IP Address Classes (Before CIDR)}
+\begin{center}
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{ ||c|c|c|c|c|c|| }
+      \hline
+      Class & Starting IP & Ending IP & Default Subnet Mask & \# of Networks & \# of Hosts per Network \\ [0.5ex]
+      \hline \hline
+      A & 1.0.0.0 & 126.255.255.255 & 255.0.0.0 & 128 (0 \& 127 reserved) & 16,777,214 \\
+      \hline
+      B & 128.0.0.0 & 191.255.255.255 & 255.255.0.0 & 16,384 & 65,534 \\
+      \hline
+      C & 192.0.0.0 & 223.255.255.255 & 255.255.255.0 & 2,097,152 & 254 \\
+      \hline
+      D (Multicast) & 224.0.0.0 & 239.255.255.255 & N/A & N/A & N/A \\
+      \hline
+      E (Reserved) & 240.0.0.0 & 255.255.255.255 & N/A & N/A & N/A \\
+      \hline
+    \end{tabular}
+  }
+\end{center}
+
+
+\subsection{Problems with Class-based IP Addressing}
+\begin{enumerate}
+  \item Wasted IPs: Organizations were forced to use fixed-size blocks (e.g., Class B had 65,534 hosts, even if only 500 were needed).
+  \item Limited Growth: The rigid structure led to a shortage of IP addresses.
+\end{enumerate}
+\subsection{CIDR and Its Elimination of Classes}
+CIDR eliminates fixed class sizes and allows arbitrary subnet sizes using the "/prefix notation", making IP allocation more efficient.
+\subsection{CIDR Addressing Example}
+Instead of using Class A, B, or C, CIDR uses prefix lengths (e.g., /16, /24, /26).
+Example:\\
+192.168.1.0/26 (instead of Class C /24)\\
+Subnet Mask: 255.255.255.192\\
+Available IPs: 64 (2 reserved: network \& broadcast)\\
+Usable IPs: 62\\
+This flexibility allows ISPs and enterprises to allocate only the required number of IPs, avoiding unnecessary waste.
+
+\section{Control Plane vs. Data Plane}
+In networking and cloud computing, the Control Plane and Data Plane are two fundamental components that define how network traffic is managed and processed.
+\subsection{Control Plane}
+\subsection{Data Plane}
+
 \section{User Principal}
 \section{Instance Principal}
 \section{Resource Principal}
